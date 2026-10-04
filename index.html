@@ -4,174 +4,519 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://*.workers.dev https://*.cloudflareworkers.com; font-src 'self'; upgrade-insecure-requests">
 <title>KB Computers | Sales & Service</title>
 <style>
-:root{--bg:#f5f7fb;--card:#fff;--text:#182230;--muted:#687386;--primary:#2563eb;--primary2:#1d4ed8;--line:#e5e7eb;--green:#15803d;--yellow:#a16207;--red:#dc2626;--shadow:0 10px 30px rgba(15,23,42,.08)}*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}a{text-decoration:none;color:inherit}.wrap{max-width:1180px;margin:auto;padding:0 18px}.top{background:#0f172a;color:#fff;position:sticky;top:0;z-index:10;box-shadow:0 4px 20px #0002}.nav{height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{font-size:21px;font-weight:800}.brand span{color:#60a5fa}.links{display:flex;gap:8px;flex-wrap:wrap}.links a,.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}.links a{color:#dbeafe}.links a:hover{background:#ffffff12}.hero{padding:62px 0;background:linear-gradient(135deg,#eff6ff,#fff)}.hero-grid{display:grid;grid-template-columns:1.4fr .8fr;gap:28px;align-items:center}.eyebrow{color:var(--primary);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:13px}.hero h1{font-size:clamp(34px,6vw,62px);line-height:1.02;margin:10px 0 16px}.hero p{font-size:18px;color:var(--muted);max-width:700px}.hero-card,.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}.hero-card{padding:24px}.hero-card strong{display:block;font-size:30px}.section{padding:48px 0}.section h2{margin:0 0 8px;font-size:30px}.lead{color:var(--muted);margin:0 0 22px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.product{padding:18px;display:flex;flex-direction:column;min-height:280px}.icon{font-size:44px}.product h3{margin:12px 0 6px}.price{font-size:23px;font-weight:800}.muted{color:var(--muted)}.stock{font-size:13px;font-weight:800;margin-top:8px}.stock.in{color:var(--green)}.stock.limited{color:var(--yellow)}.stock.out{color:var(--red)}.product-actions{margin-top:auto;padding-top:16px}.btn{background:var(--primary);color:#fff}.btn:hover{background:var(--primary2)}.btn.secondary{background:#eaf0ff;color:#1744a0}.btn.dark{background:#0f172a}.btn.danger{background:#fee2e2;color:#991b1b}.btn:disabled{opacity:.45;cursor:not-allowed}.form{padding:22px}.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label{font-size:13px;font-weight:800}.field input,.field select,.field textarea{width:100%;border:1px solid #d6dbe4;border-radius:10px;padding:11px 12px;font:inherit;background:#fff}.field textarea{min-height:100px;resize:vertical}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}.notice{padding:13px 15px;border-radius:12px;background:#eff6ff;color:#1e40af;margin:14px 0}.track-result{margin-top:18px}.status-pill{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:999px;font-weight:800;font-size:13px}.status-open{background:#dcfce7;color:#166534}.status-received{background:#dbeafe;color:#1d4ed8}.status-pending{background:#f3f4f6;color:#4b5563}.status-hold{background:#fef3c7;color:#92400e}.status-closed{background:#fee2e2;color:#991b1b}.visit{position:sticky;bottom:14px;z-index:9;margin:0 auto 16px;max-width:1180px}.visit-inner{background:#0f172a;color:#fff;border-radius:16px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;box-shadow:0 12px 35px #0003}.visit-count{font-weight:800}.admin-panel{display:none}.admin-panel.show{display:block}.admin-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:850px}.table th,.table td{padding:12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.table th{font-size:12px;text-transform:uppercase;color:var(--muted)}.mini-actions{display:flex;gap:6px;flex-wrap:wrap}.mini-actions .btn{padding:7px 9px;font-size:12px}.empty{padding:25px;text-align:center;color:var(--muted);border:1px dashed #cbd5e1;border-radius:14px}.footer{padding:30px 0;background:#0f172a;color:#cbd5e1;margin-top:20px}.footer strong{color:#fff}.small{font-size:12px}.hidden{display:none!important}@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.hero-grid{grid-template-columns:1fr}}@media(max-width:600px){.links a{display:none}.grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.hero{padding:42px 0}.section{padding:34px 0}.visit-inner{align-items:flex-start;flex-direction:column}.hero h1{font-size:40px}}
+:root{--bg:#f5f7fb;--card:#fff;--text:#182230;--muted:#687386;--primary:#2563eb;--primary2:#1d4ed8;--line:#e5e7eb;--green:#15803d;--yellow:#a16207;--red:#dc2626;--shadow:0 10px 30px rgba(15,23,42,.08)}*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}a{text-decoration:none;color:inherit}.wrap{max-width:1180px;margin:auto;padding:0 18px}.top{background:#0f172a;color:#fff;position:sticky;top:0;z-index:10;box-shadow:0 4px 20px #0002}.nav{height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{font-size:21px;font-weight:800}.brand span{color:#60a5fa}.links{display:flex;gap:8px;flex-wrap:wrap}.links a,.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}.links a{color:#dbeafe}.links a:hover{background:#ffffff12}.hero{padding:62px 0;background:linear-gradient(135deg,#eff6ff,#fff)}.hero-grid{display:grid;grid-template-columns:1.4fr .8fr;gap:28px;align-items:center}.eyebrow{color:var(--primary);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:13px}.hero h1{font-size:clamp(34px,6vw,62px);line-height:1.02;margin:10px 0 16px}.hero p{font-size:18px;color:var(--muted);max-width:700px}.hero-card,.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}.hero-card{padding:24px}.hero-card strong{display:block;font-size:30px}.section{padding:48px 0}.section h2{margin:0 0 8px;font-size:30px}.lead{color:var(--muted);margin:0 0 22px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.product{padding:18px;display:flex;flex-direction:column;min-height:280px}.icon{font-size:44px}.product h3{margin:12px 0 6px}.price{font-size:23px;font-weight:800}.muted{color:var(--muted)}.stock{font-size:13px;font-weight:800;margin-top:8px}.stock.in{color:var(--green)}.stock.limited{color:var(--yellow)}.stock.out{color:var(--red)}.product-actions{margin-top:auto;padding-top:16px}.btn{background:var(--primary);color:#fff}.btn:hover{background:var(--primary2)}.btn.secondary{background:#eaf0ff;color:#1744a0}.btn.dark{background:#0f172a}.btn.danger{background:#fee2e2;color:#991b1b}.btn:disabled{opacity:.45;cursor:not-allowed}.form{padding:22px}.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label{font-size:13px;font-weight:800}.field input,.field select,.field textarea{width:100%;border:1px solid #d6dbe4;border-radius:10px;padding:11px 12px;font:inherit;background:#fff}.field textarea{min-height:100px;resize:vertical}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}.notice{padding:13px 15px;border-radius:12px;background:#eff6ff;color:#1e40af;margin:14px 0}.track-result{margin-top:18px}.status-pill{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:999px;font-weight:800;font-size:13px}.status-open{background:#dcfce7;color:#166534}.status-received{background:#dbeafe;color:#1d4ed8}.status-pending{background:#f3f4f6;color:#4b5563}.status-hold{background:#fef3c7;color:#92400e}.status-closed{background:#fee2e2;color:#991b1b}.visit{position:sticky;bottom:14px;z-index:9;margin:0 auto 16px;max-width:1180px}.visit-inner{background:#0f172a;color:#fff;border-radius:16px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;box-shadow:0 12px 35px #0003}.visit-count{font-weight:800}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:850px}.table th,.table td{padding:12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.table th{font-size:12px;text-transform:uppercase;color:var(--muted)}.empty{padding:25px;text-align:center;color:var(--muted);border:1px dashed #cbd5e1;border-radius:14px}.footer{padding:30px 0;background:#0f172a;color:#cbd5e1;margin-top:20px}.footer strong{color:#fff}.small{font-size:12px}.hidden{display:none!important}@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.hero-grid{grid-template-columns:1fr}}@media(max-width:600px){.links a{display:none}.grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.hero{padding:42px 0}.section{padding:34px 0}.visit-inner{align-items:flex-start;flex-direction:column}.hero h1{font-size:40px}}
 </style>
 </head>
 <body>
 <header class="top"><div class="wrap nav"><div class="brand">KB <span>Computers</span></div><nav class="links"><a href="#products">Products</a><a href="#repair">Repair Call</a><a href="#track">Track Repair</a><a href="#visit">Shop Visit</a></nav></div></header>
 <main>
 <section class="hero"><div class="wrap hero-grid"><div><div class="eyebrow">Computer Hardware • Sales • Service</div><h1>Buy hardware. Check stock. Get your PC repaired.</h1><p>Browse available products before visiting the shop. Repair call logging is optional, and customers can track an existing repair using the call number and mobile number.</p><div class="actions"><a class="btn" href="#products">View Stock</a><a class="btn secondary" href="#track">Track Repair</a></div></div><div class="hero-card"><div class="muted">Shop policy</div><strong>Pay at Shop</strong><p class="muted">Online payment is not enabled. Product purchases and repair payments are handled after visiting the shop.</p><div class="notice">Repair call is optional. You can simply check stock and add items to your shop-visit list.</div></div></div></section>
-<section id="products" class="section"><div class="wrap"><h2>Products & Live Stock</h2><p class="lead">See stock availability before coming to the shop.</p><div id="productGrid" class="grid"></div></div></section>
-<section id="repair" class="section"><div class="wrap"><h2>Repair Call</h2><p class="lead">Create a repair call only if you need service tracking. It is not required for product shopping.</p><div class="card form"><form id="repairForm"><div class="form-grid"><div class="field"><label>Customer Name</label><input id="rName" required></div><div class="field"><label>Mobile Number</label><input id="rPhone" inputmode="numeric" required></div><div class="field"><label>Device</label><input id="rDevice" placeholder="Laptop / Desktop / Printer" required></div><div class="field"><label>Priority</label><select id="rPriority"><option>Normal</option><option>Urgent</option></select></div><div class="field full"><label>Problem / Service Required</label><textarea id="rProblem" required></textarea></div></div><div class="actions"><button class="btn" type="submit">Create Repair Call</button><a class="btn secondary" href="#track">Already have a call? Track it</a></div></form><div id="repairCreated" class="notice hidden"></div></div></div></section>
-<section id="track" class="section"><div class="wrap"><h2>Track Repair</h2><p class="lead">Customers can check the latest Awaiting Accessories / Accessories Received / Open / Hold / Closed status. Internal notes, estimate and staff details are not shown.</p><div class="card form"><div class="form-grid"><div class="field"><label>Repair Call Number</label><input id="trackId" placeholder="Example: KB-1001"></div><div class="field"><label>Mobile Number</label><input id="trackPhone" inputmode="numeric" placeholder="Mobile used while logging"></div></div><div class="actions"><button class="btn" onclick="trackRepair()">Track Status</button></div><div id="trackResult" class="track-result"></div></div></div></section>
-<section id="visit" class="section"><div class="wrap"><h2>Shop Visit List</h2><p class="lead">Add products you want to check or purchase when you visit the shop. This does not create a repair call.</p><div id="visitList" class="card form"></div></div></section>
-
+<section id="products" class="section"><div class="wrap"><h2>Products & Live Stock</h2><p class="lead">See stock availability before coming to the shop. Stock is shared and updates for everyone.</p><div id="productGrid" class="grid"></div></div></section>
+<section id="repair" class="section"><div class="wrap"><h2>Repair Call</h2><p class="lead">Create a repair call only if you need service tracking. It is not required for product shopping.</p><div class="card form"><form id="repairForm" autocomplete="on" novalidate><div class="form-grid"><div class="field"><label for="rName">Customer Name</label><input id="rName" name="name" maxlength="80" required autocomplete="name"></div><div class="field"><label for="rPhone">Mobile Number</label><input id="rPhone" name="phone" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" required autocomplete="tel"></div><div class="field"><label for="rDevice">Device</label><input id="rDevice" name="device" maxlength="120" placeholder="Laptop / Desktop / Printer" required></div><div class="field"><label for="rPriority">Priority</label><select id="rPriority" name="priority"><option value="Normal">Normal</option><option value="Urgent">Urgent</option></select></div><div class="field full"><label for="rProblem">Problem / Service Required</label><textarea id="rProblem" name="problem" maxlength="1000" required></textarea></div></div><div class="actions"><button class="btn" type="submit">Create Repair Call</button><a class="btn secondary" href="#track">Already have a call? Track it</a></div></form><div id="repairCreated" class="notice hidden"></div></div></div></section>
+<section id="track" class="section"><div class="wrap"><h2>Track Repair</h2><p class="lead">Customers can check the latest status. Internal notes and staff details are not shown.</p><div class="card form"><div class="form-grid"><div class="field"><label for="trackId">Repair Call Number</label><input id="trackId" maxlength="32" placeholder="Example: KB-1001" autocomplete="off"></div><div class="field"><label for="trackPhone">Mobile Number</label><input id="trackPhone" inputmode="numeric" maxlength="10" placeholder="Mobile used while logging" autocomplete="tel"></div></div><div class="actions"><button class="btn" type="button" id="trackBtn">Track Status</button></div><div id="trackResult" class="track-result"></div></div></div></section>
+<section id="visit" class="section"><div class="wrap"><h2>Shop Visit List</h2><p class="lead">Add products you want to check or purchase when you visit the shop. This list is private to your browser.</p><div id="visitList" class="card form"></div></div></section>
 </main>
-<div class="visit"><div class="wrap"><div class="visit-inner"><div><div class="visit-count" id="visitCount">0 items in shop visit list</div><div class="small">Bring this list to the shop.</div></div><button class="btn" onclick="sendVisitWhatsApp()">Send List on WhatsApp</button></div></div></div>
+<div class="visit"><div class="wrap"><div class="visit-inner"><div><div class="visit-count" id="visitCount">0 items in shop visit list</div><div class="small">Bring this list to the shop.</div></div><button class="btn" type="button" id="waBtn">Send List on WhatsApp</button></div></div></div>
 <footer class="footer"><div class="wrap"><strong>KB Computers</strong><p class="small">Hardware sales and computer repair service. Local shop service. Payment only at shop visit.</p><p class="small">WhatsApp: +91 98431 62978</p><p class="small">© 2026 KB Computers</p></div></footer>
 <script>
 'use strict';
 
 /*
-  KB Computers - hardened static client
-  IMPORTANT: GitHub Pages/HTML cannot provide server-side security.
-  This page intentionally contains NO admin credentials or admin controls.
-  Repair/visit data stored in the browser can be modified by the browser owner.
+  KB Computers – Frontend (GitHub Pages + Cloudflare Worker)
+  ---------------------------------------------------------
+  - Cart (shop visit list) → stays in browser localStorage (private)
+  - Product stock          → shared via Cloudflare D1
+  - Repair calls           → shared via Cloudflare D1
 */
-const WA_NUMBER = '919843162978';
-const PRODUCTS_KEY = 'kb_products_public_v1';
-const REPAIRS_KEY = 'kb_repairs_local_v1';
-const CART_KEY = 'kb_cart_local_v1';
-const MAX_NAME = 80, MAX_PHONE = 10, MAX_TEXT = 1000;
 
-const DEMO_PRODUCTS = Object.freeze([
-  {id:'p1',name:'16GB DDR4 RAM',price:2999,icon:'🧠',tag:'Popular',stock:5},
-  {id:'p2',name:'1TB NVMe SSD',price:5499,icon:'💾',tag:'Fast',stock:3},
-  {id:'p3',name:'Wireless Keyboard & Mouse',price:899,icon:'⌨️',tag:'Value',stock:8},
-  {id:'p4',name:'650W Power Supply',price:3499,icon:'⚡',tag:'Build',stock:2}
-]);
+(function () {
+  // ========== CONFIG – CHANGE THIS ==========
+  // After you deploy the Worker, paste the URL here
+  const API_BASE = "https://kb-computers-api.YOUR-SUBDOMAIN.workers.dev";
+  // ==========================================
 
-function safeJsonRead(key, fallback){
-  try {
-    const raw = localStorage.getItem(key);
-    if (!raw) return fallback;
-    const value = JSON.parse(raw);
-    return value ?? fallback;
-  } catch (_) { return fallback; }
-}
-function safeJsonWrite(key,value){
-  try { localStorage.setItem(key, JSON.stringify(value)); return true; }
-  catch (_) { alert('Your browser storage is unavailable. Please enable site storage.'); return false; }
-}
-function cleanText(value,max=MAX_TEXT){
-  return String(value ?? '').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g,'').trim().slice(0,max);
-}
-function cleanName(value){ return cleanText(value,MAX_NAME).replace(/[^\p{L}\p{N} .'-]/gu,''); }
-function cleanPhone(value){ return String(value ?? '').replace(/\D/g,'').slice(-MAX_PHONE); }
-function validIndianMobile(phone){ return /^[6-9]\d{9}$/.test(phone); }
-function money(n){ return '₹'+Number(n||0).toLocaleString('en-IN'); }
-function stockInfo(n){
-  n = Number.isFinite(Number(n)) ? Math.max(0,Math.floor(Number(n))) : 0;
-  return n<=0 ? ['out','Out of Stock'] : n<=3 ? ['limited','Limited Stock • '+n+' left'] : ['in','In Stock • '+n+' available'];
-}
-function makeId(){
-  if (globalThis.crypto?.randomUUID) return 'KB-'+crypto.randomUUID().replaceAll('-','').slice(0,10).toUpperCase();
-  return 'KB-'+Date.now().toString(36).toUpperCase()+'-'+Math.floor(Math.random()*1e6).toString(36).toUpperCase();
-}
-function getProducts(){
-  const p=safeJsonRead(PRODUCTS_KEY,null);
-  if (!Array.isArray(p)) { safeJsonWrite(PRODUCTS_KEY,DEMO_PRODUCTS); return DEMO_PRODUCTS.map(x=>({...x})); }
-  return p.filter(x=>x && typeof x.id==='string' && typeof x.name==='string').map(x=>({
-    id:x.id,name:cleanText(x.name,120),price:Math.max(0,Number(x.price)||0),icon:cleanText(x.icon,8),tag:cleanText(x.tag,40),stock:Math.max(0,Math.floor(Number(x.stock)||0))
-  }));
-}
-function getCart(){
-  const c=safeJsonRead(CART_KEY,[]);
-  return Array.isArray(c) ? c.filter(x=>x && typeof x.id==='string' && Number.isInteger(x.qty) && x.qty>0).map(x=>({...x,qty:Math.min(x.qty,99)})) : [];
-}
-function setCart(c){safeJsonWrite(CART_KEY,c);}
-function getRepairs(){
-  const r=safeJsonRead(REPAIRS_KEY,[]);
-  return Array.isArray(r) ? r.filter(x=>x && typeof x.id==='string' && typeof x.phone==='string') : [];
-}
-function setRepairs(r){safeJsonWrite(REPAIRS_KEY,r);}
-function el(id){return document.getElementById(id);}
-function button(text,cls,handler,disabled=false){
-  const b=document.createElement('button'); b.type='button'; b.className='btn'+(cls?' '+cls:''); b.textContent=text; b.disabled=disabled; b.addEventListener('click',handler); return b;
-}
-function renderProducts(){
-  const grid=el('productGrid'); grid.replaceChildren();
-  const ps=getProducts();
-  if(!ps.length){const e=document.createElement('div');e.className='empty';e.textContent='No products available.';grid.append(e);return;}
-  for(const p of ps){
-    const [cls,label]=stockInfo(p.stock), article=document.createElement('article'); article.className='card product';
-    const icon=document.createElement('div');icon.className='icon';icon.textContent=p.icon||'🖥️';
-    const tag=document.createElement('div');tag.className='muted small';tag.textContent=p.tag||'';
-    const name=document.createElement('h3');name.textContent=p.name;
-    const price=document.createElement('div');price.className='price';price.textContent=money(p.price);
-    const stock=document.createElement('div');stock.className='stock '+cls;stock.textContent=label;
-    const actions=document.createElement('div');actions.className='product-actions';
-    actions.append(button(p.stock<=0?'Unavailable':'Add to Visit','',()=>addToVisit(p.id),p.stock<=0));
-    article.append(icon,tag,name,price,stock,actions);grid.append(article);
+  const WA_NUMBER = "919843162978";
+  const CART_KEY = "kb_cart_local_v1";
+  const MAX_NAME = 80;
+  const MAX_PHONE = 10;
+  const MAX_TEXT = 1000;
+  const MAX_QTY = 99;
+
+  // ---------- Safe utilities ----------
+  function safeJsonRead(key, fallback) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (raw === null || typeof raw !== "string" || raw.length > 500000) return fallback;
+      const value = JSON.parse(raw);
+      return value ?? fallback;
+    } catch (_) {
+      return fallback;
+    }
   }
-}
-function addToVisit(id){
-  const p=getProducts().find(x=>x.id===id); if(!p || p.stock<=0)return;
-  const c=getCart(), found=c.find(x=>x.id===id);
-  if(found) found.qty=Math.min(found.qty+1,p.stock);
-  else c.push({id:p.id,name:p.name,price:p.price,qty:1});
-  setCart(c);renderCart();
-}
-function removeVisit(id){setCart(getCart().filter(x=>x.id!==id));renderCart();}
-function renderCart(){
-  const c=getCart(), container=el('visitList');
-  const count=c.reduce((a,x)=>a+x.qty,0); el('visitCount').textContent=count+' item'+(count===1?'':'s')+' in shop visit list';
-  container.replaceChildren();
-  if(!c.length){const e=document.createElement('div');e.className='empty';e.textContent='No products added yet. Browse stock above and add what you want to check at the shop.';container.append(e);return;}
-  const wrap=document.createElement('div');wrap.className='table-wrap';const table=document.createElement('table');table.className='table';
-  const head=table.createTHead().insertRow();['Product','Qty','Price',''].forEach(t=>{const th=document.createElement('th');th.textContent=t;head.append(th);});
-  const body=table.createTBody();
-  for(const x of c){const row=body.insertRow();let cell=row.insertCell();cell.textContent=x.name;cell=row.insertCell();cell.textContent=String(x.qty);cell=row.insertCell();cell.textContent=money(x.price*x.qty);cell=row.insertCell();cell.append(button('Remove','danger',()=>removeVisit(x.id)));}
-  wrap.append(table);container.append(wrap);
-}
-function sendVisitWhatsApp(){
-  const c=getCart(); if(!c.length){alert('Add at least one product to the shop visit list.');return;}
-  const lines=['KB Computers - Shop Visit Request','',...c.map(x=>`${x.name} x ${x.qty} = ${money(x.price*x.qty)}`),'','Payment will be made at the shop.'];
-  const url='https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent(lines.join('\n'));
-  const popup=window.open(url,'_blank','noopener,noreferrer');
-  if(popup){setCart([]);renderCart();}
-  else alert('WhatsApp could not be opened. Your list has not been cleared.');
-}
-function normaliseRepair(r){
-  if(!r || typeof r!=='object')return null;
-  const status=['Awaiting Accessories','Accessories Received','Open','Hold','Closed'].includes(r.status)?r.status:'Awaiting Accessories';
-  return {id:cleanText(r.id,32),name:cleanName(r.name),phone:cleanPhone(r.phone),device:cleanText(r.device,120),priority:r.priority==='Urgent'?'Urgent':'Normal',problem:cleanText(r.problem),status,created:Number.isFinite(Date.parse(r.created))?r.created:new Date().toISOString()};
-}
-function createRepair(event){
-  event.preventDefault();
-  const name=cleanName(el('rName').value),phone=cleanPhone(el('rPhone').value),device=cleanText(el('rDevice').value,120),problem=cleanText(el('rProblem').value),priority=el('rPriority').value==='Urgent'?'Urgent':'Normal';
-  if(name.length<2){alert('Please enter a valid customer name.');return;}
-  if(!validIndianMobile(phone)){alert('Please enter a valid 10-digit Indian mobile number.');return;}
-  if(device.length<2){alert('Please enter the device.');return;}
-  if(problem.length<3){alert('Please describe the problem.');return;}
-  const r={id:makeId(),name,phone,device,priority,problem,status:'Awaiting Accessories',created:new Date().toISOString()};
-  const rs=getRepairs();rs.unshift(r);setRepairs(rs);
-  const out=el('repairCreated');out.replaceChildren();out.classList.remove('hidden');
-  const strong=document.createElement('strong');strong.textContent='Repair call created: '+r.id;out.append(strong,document.createElement('br'));
-  const msg=document.createElement('span');msg.textContent='Status: Awaiting Accessories — repair work will not start until the device/accessories are received at the shop.';out.append(msg,document.createElement('br'));
-  const save=document.createElement('span');save.textContent='Save the call number and use it with the same mobile number to track.';out.append(save);
-  el('repairForm').reset();
-}
-function trackRepair(){
-  const id=cleanText(el('trackId').value,32).toUpperCase(),phone=cleanPhone(el('trackPhone').value),out=el('trackResult');out.replaceChildren();
-  if(!id || !validIndianMobile(phone)){const n=document.createElement('div');n.className='notice';n.textContent='Enter a valid repair call number and 10-digit mobile number.';out.append(n);return;}
-  const r=getRepairs().map(normaliseRepair).find(x=>x && x.id.toUpperCase()===id && x.phone===phone);
-  if(!r){const n=document.createElement('div');n.className='notice';n.style.background='#fff1f2';n.style.color='#9f1239';n.textContent='No matching repair call found. Please check the call number and mobile number.';out.append(n);return;}
-  const cls=r.status==='Awaiting Accessories'?'status-pending':r.status==='Accessories Received'?'status-received':r.status==='Open'?'status-open':r.status==='Hold'?'status-hold':'status-closed';
-  const msg=r.status==='Awaiting Accessories'?'Repair call is logged. Please bring the required device/accessories to the shop. Repair work has not started yet.':r.status==='Accessories Received'?'Device/accessories received at the shop. The repair can now be opened.':r.status==='Open'?'Repair is currently open and being worked on.':r.status==='Hold'?'Repair is on hold. Please contact the shop if you need an update.':'Repair call is closed.';
-  const card=document.createElement('div');card.className='card form';card.style.boxShadow='none';
-  const top=document.createElement('div');top.style.cssText='display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap';
-  const strong=document.createElement('strong');strong.textContent=r.id;const pill=document.createElement('span');pill.className='status-pill '+cls;pill.textContent=r.status;top.append(strong,pill);
-  const p=document.createElement('p');p.append(document.createTextNode(r.name),document.createElement('br'),document.createTextNode(r.device));
-  const logged=document.createElement('p');logged.className='muted';logged.textContent='Logged: '+new Date(r.created).toLocaleString('en-IN');
-  const notice=document.createElement('div');notice.className='notice';notice.textContent=msg;card.append(top,p,logged,notice);out.append(card);
-}
 
-el('repairForm').addEventListener('submit',createRepair);
-renderProducts();renderCart();
+  function safeJsonWrite(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+      return true;
+    } catch (_) {
+      alert("Browser storage is unavailable. Please enable site storage.");
+      return false;
+    }
+  }
+
+  function cleanText(value, max = MAX_TEXT) {
+    return String(value ?? "")
+      .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "")
+      .trim()
+      .slice(0, max);
+  }
+
+  function cleanName(value) {
+    return cleanText(value, MAX_NAME).replace(/[^\p{L}\p{N} .'\-]/gu, "");
+  }
+
+  function cleanPhone(value) {
+    return String(value ?? "").replace(/\D/g, "").slice(-MAX_PHONE);
+  }
+
+  function validIndianMobile(phone) {
+    return typeof phone === "string" && /^[6-9]\d{9}$/.test(phone);
+  }
+
+  function money(n) {
+    const num = Number(n);
+    return "₹" + (Number.isFinite(num) ? Math.max(0, Math.floor(num)) : 0).toLocaleString("en-IN");
+  }
+
+  function stockInfo(n) {
+    const qty = Number.isFinite(Number(n)) ? Math.max(0, Math.floor(Number(n))) : 0;
+    if (qty <= 0) return ["out", "Out of Stock"];
+    if (qty <= 3) return ["limited", "Limited Stock • " + qty + " left"];
+    return ["in", "In Stock • " + qty + " available"];
+  }
+
+  function el(id) {
+    const node = document.getElementById(id);
+    if (!node) throw new Error("Missing element: " + id);
+    return node;
+  }
+
+  // ---------- Cart (private – localStorage) ----------
+  function getCart() {
+    const raw = safeJsonRead(CART_KEY, []);
+    if (!Array.isArray(raw)) return [];
+    return raw
+      .filter((x) => x && typeof x.id === "string")
+      .map((x) => ({
+        id: cleanText(x.id, 40),
+        name: cleanText(x.name, 120),
+        price: Math.max(0, Math.floor(Number(x.price) || 0)),
+        qty: Math.min(MAX_QTY, Math.max(1, Math.floor(Number(x.qty) || 1))),
+      }))
+      .filter((x) => x.id && x.qty > 0);
+  }
+
+  function setCart(c) {
+    if (!Array.isArray(c)) return false;
+    return safeJsonWrite(CART_KEY, c);
+  }
+
+  // ---------- Products (shared – from API) ----------
+  let productsCache = [];
+
+  async function fetchProducts() {
+    try {
+      const res = await fetch(API_BASE + "/products", { method: "GET" });
+      if (!res.ok) throw new Error("Failed to load products");
+      const data = await res.json();
+      productsCache = Array.isArray(data) ? data : [];
+      return productsCache;
+    } catch (err) {
+      console.error(err);
+      productsCache = [];
+      return [];
+    }
+  }
+
+  // ---------- Render ----------
+  function createButton(text, className, handler, disabled) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "btn" + (className ? " " + className : "");
+    b.textContent = text;
+    b.disabled = !!disabled;
+    b.addEventListener("click", handler, { passive: true });
+    return b;
+  }
+
+  function renderProducts() {
+    const grid = el("productGrid");
+    grid.replaceChildren();
+
+    if (!productsCache.length) {
+      const empty = document.createElement("div");
+      empty.className = "empty";
+      empty.textContent = "Unable to load products. Please refresh the page.";
+      grid.append(empty);
+      return;
+    }
+
+    for (const p of productsCache) {
+      const [cls, label] = stockInfo(p.stock);
+      const article = document.createElement("article");
+      article.className = "card product";
+
+      const icon = document.createElement("div");
+      icon.className = "icon";
+      icon.textContent = p.icon || "🖥️";
+
+      const tag = document.createElement("div");
+      tag.className = "muted small";
+      tag.textContent = p.tag || "";
+
+      const name = document.createElement("h3");
+      name.textContent = p.name;
+
+      const price = document.createElement("div");
+      price.className = "price";
+      price.textContent = money(p.price);
+
+      const stock = document.createElement("div");
+      stock.className = "stock " + cls;
+      stock.textContent = label;
+
+      const actions = document.createElement("div");
+      actions.className = "product-actions";
+      actions.append(
+        createButton(
+          p.stock <= 0 ? "Unavailable" : "Add to Visit",
+          "",
+          () => addToVisit(p.id),
+          p.stock <= 0
+        )
+      );
+
+      article.append(icon, tag, name, price, stock, actions);
+      grid.append(article);
+    }
+  }
+
+  function addToVisit(id) {
+    const p = productsCache.find((x) => x.id === id);
+    if (!p || p.stock <= 0) return;
+
+    const cart = getCart();
+    const found = cart.find((x) => x.id === id);
+    if (found) {
+      found.qty = Math.min(found.qty + 1, p.stock, MAX_QTY);
+    } else {
+      cart.push({ id: p.id, name: p.name, price: p.price, qty: 1 });
+    }
+    setCart(cart);
+    renderCart();
+  }
+
+  function removeVisit(id) {
+    setCart(getCart().filter((x) => x.id !== id));
+    renderCart();
+  }
+
+  function renderCart() {
+    const cart = getCart();
+    const container = el("visitList");
+    const count = cart.reduce((sum, x) => sum + x.qty, 0);
+    el("visitCount").textContent =
+      count + " item" + (count === 1 ? "" : "s") + " in shop visit list";
+
+    container.replaceChildren();
+    if (cart.length === 0) {
+      const empty = document.createElement("div");
+      empty.className = "empty";
+      empty.textContent =
+        "No products added yet. Browse stock above and add what you want to check at the shop.";
+      container.append(empty);
+      return;
+    }
+
+    const wrap = document.createElement("div");
+    wrap.className = "table-wrap";
+    const table = document.createElement("table");
+    table.className = "table";
+
+    const head = table.createTHead().insertRow();
+    ["Product", "Qty", "Price", ""].forEach((t) => {
+      const th = document.createElement("th");
+      th.textContent = t;
+      head.append(th);
+    });
+
+    const body = table.createTBody();
+    for (const item of cart) {
+      const row = body.insertRow();
+      row.insertCell().textContent = item.name;
+      row.insertCell().textContent = String(item.qty);
+      row.insertCell().textContent = money(item.price * item.qty);
+      const actionCell = row.insertCell();
+      actionCell.append(createButton("Remove", "danger", () => removeVisit(item.id)));
+    }
+
+    wrap.append(table);
+    container.append(wrap);
+  }
+
+  // ---------- WhatsApp + Stock Reserve ----------
+  async function sendVisitWhatsApp() {
+    const cart = getCart();
+    if (cart.length === 0) {
+      alert("Add at least one product to the shop visit list.");
+      return;
+    }
+
+    const btn = el("waBtn");
+    btn.disabled = true;
+    btn.textContent = "Reserving stock...";
+
+    try {
+      // 1. Reserve stock on the shared database
+      const res = await fetch(API_BASE + "/stock/reserve", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: cart.map((x) => ({ id: x.id, qty: x.qty })),
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.error || "Could not reserve stock. Please try again.");
+        // Refresh products so user sees latest stock
+        await fetchProducts();
+        renderProducts();
+        return;
+      }
+
+      // 2. Open WhatsApp
+      const lines = [
+        "KB Computers - Shop Visit Request",
+        "",
+        ...cart.map((x) => x.name + " x " + x.qty + " = " + money(x.price * x.qty)),
+        "",
+        "Payment will be made at the shop.",
+      ];
+      const url =
+        "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(lines.join("\n"));
+
+      const popup = window.open(url, "_blank", "noopener,noreferrer");
+      if (popup) {
+        setCart([]);
+        renderCart();
+        // Refresh stock for everyone
+        await fetchProducts();
+        renderProducts();
+      } else {
+        alert("WhatsApp could not be opened. Stock was reserved but list was not cleared.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Network error. Please check your connection and try again.");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Send List on WhatsApp";
+    }
+  }
+
+  // ---------- Repair ----------
+  async function createRepair(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const name = cleanName(el("rName").value);
+    const phone = cleanPhone(el("rPhone").value);
+    const device = cleanText(el("rDevice").value, 120);
+    const problem = cleanText(el("rProblem").value, MAX_TEXT);
+    const priority = el("rPriority").value === "Urgent" ? "Urgent" : "Normal";
+
+    if (name.length < 2) {
+      alert("Please enter a valid customer name.");
+      return;
+    }
+    if (!validIndianMobile(phone)) {
+      alert("Please enter a valid 10-digit Indian mobile number starting with 6-9.");
+      return;
+    }
+    if (device.length < 2) {
+      alert("Please enter the device.");
+      return;
+    }
+    if (problem.length < 3) {
+      alert("Please describe the problem.");
+      return;
+    }
+
+    const submitBtn = el("repairForm").querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Creating...";
+
+    try {
+      const res = await fetch(API_BASE + "/repairs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, phone, device, problem, priority }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.error || "Could not create repair call.");
+        return;
+      }
+
+      const out = el("repairCreated");
+      out.replaceChildren();
+      out.classList.remove("hidden");
+
+      const strong = document.createElement("strong");
+      strong.textContent = "Repair call created: " + data.id;
+      out.append(strong, document.createElement("br"));
+
+      const msg = document.createElement("span");
+      msg.textContent =
+        "Status: Awaiting Accessories — repair work will not start until the device/accessories are received at the shop.";
+      out.append(msg, document.createElement("br"));
+
+      const save = document.createElement("span");
+      save.textContent =
+        "Save the call number and use it with the same mobile number to track.";
+      out.append(save);
+
+      el("repairForm").reset();
+    } catch (err) {
+      console.error(err);
+      alert("Network error. Please try again.");
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Create Repair Call";
+    }
+  }
+
+  async function trackRepair() {
+    const id = cleanText(el("trackId").value, 32).toUpperCase();
+    const phone = cleanPhone(el("trackPhone").value);
+    const out = el("trackResult");
+    out.replaceChildren();
+
+    if (!id || !validIndianMobile(phone)) {
+      const n = document.createElement("div");
+      n.className = "notice";
+      n.textContent = "Enter a valid repair call number and 10-digit mobile number.";
+      out.append(n);
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        API_BASE + "/repairs/track?id=" + encodeURIComponent(id) + "&phone=" + encodeURIComponent(phone)
+      );
+      const data = await res.json();
+
+      if (!res.ok) {
+        const n = document.createElement("div");
+        n.className = "notice";
+        n.style.background = "#fff1f2";
+        n.style.color = "#9f1239";
+        n.textContent = data.error || "No matching repair call found.";
+        out.append(n);
+        return;
+      }
+
+      const statusClass =
+        data.status === "Awaiting Accessories"
+          ? "status-pending"
+          : data.status === "Accessories Received"
+          ? "status-received"
+          : data.status === "Open"
+          ? "status-open"
+          : data.status === "Hold"
+          ? "status-hold"
+          : "status-closed";
+
+      const statusMsg =
+        data.status === "Awaiting Accessories"
+          ? "Repair call is logged. Please bring the required device/accessories to the shop. Repair work has not started yet."
+          : data.status === "Accessories Received"
+          ? "Device/accessories received at the shop. The repair can now be opened."
+          : data.status === "Open"
+          ? "Repair is currently open and being worked on."
+          : data.status === "Hold"
+          ? "Repair is on hold. Please contact the shop if you need an update."
+          : "Repair call is closed.";
+
+      const card = document.createElement("div");
+      card.className = "card form";
+      card.style.boxShadow = "none";
+
+      const top = document.createElement("div");
+      top.style.cssText =
+        "display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap";
+
+      const strong = document.createElement("strong");
+      strong.textContent = data.id;
+
+      const pill = document.createElement("span");
+      pill.className = "status-pill " + statusClass;
+      pill.textContent = data.status;
+
+      top.append(strong, pill);
+
+      const p = document.createElement("p");
+      p.append(
+        document.createTextNode(data.name),
+        document.createElement("br"),
+        document.createTextNode(data.device)
+      );
+
+      const logged = document.createElement("p");
+      logged.className = "muted";
+      logged.textContent = "Logged: " + new Date(data.created).toLocaleString("en-IN");
+
+      const notice = document.createElement("div");
+      notice.className = "notice";
+      notice.textContent = statusMsg;
+
+      card.append(top, p, logged, notice);
+      out.append(card);
+    } catch (err) {
+      console.error(err);
+      const n = document.createElement("div");
+      n.className = "notice";
+      n.style.background = "#fff1f2";
+      n.style.color = "#9f1239";
+      n.textContent = "Network error. Please try again.";
+      out.append(n);
+    }
+  }
+
+  // ---------- Init ----------
+  async function init() {
+    el("repairForm").addEventListener("submit", createRepair);
+    el("trackBtn").addEventListener("click", trackRepair);
+    el("waBtn").addEventListener("click", sendVisitWhatsApp);
+
+    renderCart();
+    await fetchProducts();
+    renderProducts();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
 </script>
 </body>
 </html>
