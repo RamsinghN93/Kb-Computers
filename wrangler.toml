@@ -1,0 +1,8 @@
+name = "kb-computers-api"
+main = "index.ts"
+compatibility_date = "2024-09-23"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "kb-computers-db"
+database_id = "PASTE_YOUR_DATABASE_ID_HERE"
