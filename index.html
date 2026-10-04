@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="KB Computers - Computer Hardware Sales, Service and Upgrades">
+<title>KB Computers | Hardware & Service</title>
+<style>
+:root{--bg:#07111f;--card:#0e1c2e;--card2:#12243a;--text:#eef6ff;--muted:#9fb1c7;--brand:#4f8cff;--brand2:#6ee7ff;--good:#36d399;--danger:#ff6b7a;--line:#20344d}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(135deg,#06101d,#0b1728 55%,#07111f);color:var(--text)}
+a{text-decoration:none;color:inherit}.container{width:min(1160px,92%);margin:auto}.topbar{background:#050c16;border-bottom:1px solid var(--line);font-size:13px;color:var(--muted);padding:8px 0}.topbar .container{display:flex;justify-content:space-between;gap:15px}.nav{position:sticky;top:0;z-index:20;background:rgba(6,16,29,.9);backdrop-filter:blur(15px);border-bottom:1px solid var(--line)}.navin{height:72px;display:flex;align-items:center;justify-content:space-between}.logo{font-weight:900;font-size:21px;letter-spacing:-.5px}.logo span{color:var(--brand2)}.links{display:flex;gap:25px;color:#c6d4e5;font-size:14px}.links a:hover{color:#fff}.btn{border:0;border-radius:12px;padding:12px 17px;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px}.primary{background:linear-gradient(135deg,var(--brand),#765cff);color:#fff}.secondary{background:#15283f;color:#fff;border:1px solid #2a4564}.hero{padding:75px 0 55px;position:relative;overflow:hidden}.hero:before{content:"";position:absolute;width:480px;height:480px;background:#326cff20;filter:blur(80px);border-radius:50%;right:-150px;top:-150px}.grid2{display:grid;grid-template-columns:1.2fr .8fr;gap:35px;align-items:center}.eyebrow{display:inline-flex;padding:7px 11px;border:1px solid #2d5b82;background:#0e2740;border-radius:999px;color:#8ddfff;font-size:12px;font-weight:800}.hero h1{font-size:clamp(40px,6vw,72px);line-height:.98;letter-spacing:-3px;margin:18px 0}.hero h1 span{color:var(--brand2)}.hero p{font-size:18px;line-height:1.65;color:var(--muted);max-width:650px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}.shopcard{background:linear-gradient(160deg,#10243a,#0b1727);border:1px solid var(--line);padding:25px;border-radius:24px;box-shadow:0 20px 60px #0005}.shopcard .big{font-size:38px;font-weight:900}.status{display:flex;align-items:center;gap:8px;color:#a9c2d9;font-size:13px;margin:15px 0 22px}.dot{width:9px;height:9px;background:var(--good);border-radius:50%;box-shadow:0 0 15px var(--good)}.mini{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mini div{background:#0a1727;border:1px solid var(--line);padding:13px;border-radius:14px}.mini b{display:block;font-size:17px}.mini span{color:var(--muted);font-size:12px}section{padding:55px 0}.sectionhead{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:24px}.sectionhead h2{font-size:30px;margin:0}.sectionhead p{color:var(--muted);margin:7px 0 0}.products{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.product{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;transition:.2s}.product:hover{transform:translateY(-3px);border-color:#36597d}.icon{height:110px;border-radius:14px;background:linear-gradient(135deg,#142b45,#0a1727);display:grid;place-items:center;font-size:43px;margin-bottom:14px}.product h3{margin:0 0 7px;font-size:16px}.product p{margin:0;color:var(--muted);font-size:13px;min-height:38px}.price{font-size:19px;font-weight:900;margin:14px 0}.tag{display:inline-block;padding:5px 8px;border-radius:8px;background:#123325;color:#72e9b0;font-size:11px;font-weight:800}.servicegrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.service{padding:23px;border:1px solid var(--line);background:var(--card);border-radius:18px}.service .emoji{font-size:30px}.service h3{margin:13px 0 8px}.service p{color:var(--muted);line-height:1.55;font-size:14px}.notice{padding:20px;border:1px solid #395a7b;background:#0d2035;border-radius:18px;color:#cfe2f6;margin-top:18px}.notice strong{color:#fff}.shop{display:grid;grid-template-columns:1fr 1fr;gap:18px}.panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px}.panel h3{margin-top:0}.field{margin:10px 0}.field label{display:block;color:#9fb1c7;font-size:12px;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:#091625;color:#fff;outline:none}.field textarea{min-height:85px;resize:vertical}.cart{position:fixed;right:18px;bottom:18px;z-index:30;display:none;background:linear-gradient(135deg,#4f8cff,#765cff);padding:15px 18px;border-radius:16px;box-shadow:0 15px 40px #0007;font-weight:900}.cart.show{display:block}.modal{display:none;position:fixed;inset:0;background:#0009;z-index:50;padding:18px;align-items:center;justify-content:center}.modal.open{display:flex}.modalbox{width:min(500px,100%);background:#0d1b2c;border:1px solid #2c4664;border-radius:22px;padding:25px;max-height:90vh;overflow:auto}.close{float:right;background:#172b43;border:0;color:#fff;border-radius:10px;padding:7px 10px;cursor:pointer}.upi{font-size:26px;font-weight:900;color:#78e7ff;margin:10px 0}.qrbox{width:170px;height:170px;background:#fff;color:#111;margin:15px auto;display:grid;place-items:center;text-align:center;padding:12px;font-size:12px;border-radius:10px}.small{font-size:12px;color:var(--muted);line-height:1.5}footer{border-top:1px solid var(--line);padding:35px 0;color:var(--muted);font-size:13px}.admin{background:#081322}.status-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.status-btn{border:0;border-radius:12px;padding:11px 15px;font-weight:800;cursor:pointer;color:#fff;box-shadow:0 8px 20px #0003;transition:.15s}.status-btn:hover{transform:translateY(-1px)}.status-btn.open{background:linear-gradient(135deg,#20a66a,#36d399)}.status-btn.hold{background:linear-gradient(135deg,#c88719,#f5b942)}.status-btn.closed{background:linear-gradient(135deg,#d94a5b,#ff6b7a)}.status-btn.active{outline:2px solid #fff;outline-offset:2px}.hidden{display:none!important}.admin-tools{display:flex;gap:10px;flex-wrap:wrap}.empty{color:var(--muted);padding:20px;border:1px dashed #2a405b;border-radius:15px}.toast{position:fixed;left:50%;bottom:25px;transform:translateX(-50%) translateY(80px);background:#13263d;border:1px solid #345372;padding:12px 17px;border-radius:12px;z-index:100;opacity:0;transition:.25s}.toast.show{transform:translateX(-50%) translateY(0);opacity:1}@media(max-width:850px){.grid2,.shop{grid-template-columns:1fr}.products{grid-template-columns:repeat(2,1fr)}.servicegrid{grid-template-columns:1fr}.links{display:none}.hero{padding-top:45px}.hero h1{letter-spacing:-2px}}@media(max-width:500px){.products{grid-template-columns:1fr}.topbar .container{font-size:11px}.navin{height:62px}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="container"><span>📍 Serving customers in our local area</span><span>🏪 Payments accepted at shop only</span></div></div>
+<nav class="nav"><div class="container navin"><a href="#" class="logo">KB <span>COMPUTERS</span></a><div class="links"><a href="#products">Products</a><a href="#services">Services</a><a href="#repairs">Repair Calls</a><a href="#shop">Visit Shop</a><a href="#team">Team Update</a></div><a class="btn primary" href="#shop">Visit Shop</a></div></nav>
+
+<header class="hero"><div class="container grid2">
+<div><span class="eyebrow">COMPUTERS • HARDWARE • SERVICE</span><h1>Your local <span>tech partner.</span></h1><p>Computer hardware, upgrades, accessories and reliable service — available for customers in our local area. Browse online, then visit our shop for final selection, quotation and payment.</p><div class="actions"><a class="btn primary" href="#products">Browse Products</a><a class="btn secondary" href="#services">View Services</a></div></div>
+<div class="shopcard"><div class="small">WELCOME TO</div><div class="big">KB Computers</div><div class="status"><i class="dot"></i> Local service • Shop visit required</div><div class="mini"><div><b>Hardware</b><span>PC parts & accessories</span></div><div><b>Service</b><span>Repair & upgrades</span></div><div><b>UPI</b><span>Pay at shop</span></div><div><b>Support</b><span>Local customers</span></div></div></div>
+</div></header>
+
+<section id="products"><div class="container"><div class="sectionhead"><div><h2>Featured Products</h2><p>Updated by the KB Computers team.</p></div><button class="btn secondary" onclick="openAdmin()">Team Login</button></div><div id="productGrid" class="products"></div><div class="notice">🛒 <strong>Online ordering is not enabled.</strong> Add items to your visit list, then come to the shop. Final availability, price and payment will be confirmed at the shop.</div></div></section>
+
+<section id="services"><div class="container"><div class="sectionhead"><div><h2>Computer Services</h2><p>From troubleshooting to complete upgrades.</p></div></div><div class="servicegrid">
+<div class="service"><div class="emoji">🛠️</div><h3>PC Repair</h3><p>Hardware diagnostics, Windows issues, boot problems, slow PC troubleshooting and general repair.</p></div>
+<div class="service"><div class="emoji">⚡</div><h3>Upgrades</h3><p>RAM, SSD, HDD, graphics card, power supply and other component upgrade guidance.</p></div>
+<div class="service"><div class="emoji">🖥️</div><h3>PC Build</h3><p>Component selection and custom desktop builds based on your budget and usage.</p></div>
+<div class="service"><div class="emoji">🧹</div><h3>Cleaning & Maintenance</h3><p>Dust cleaning, thermal maintenance and performance checks.</p></div>
+<div class="service"><div class="emoji">💾</div><h3>Data & Software</h3><p>OS installation, software setup and basic data-related support.</p></div>
+<div class="service"><div class="emoji">🔌</div><h3>Accessories</h3><p>Keyboard, mouse, cables, adapters and everyday computer accessories.</p></div>
+</div></div></section>
+
+
+<section id="repairs"><div class="container">
+<div class="sectionhead"><div><h2>PC Repair Calls</h2><p>Log a repair requirement and track it through the shop.</p></div>
+<button class="btn primary" onclick="openRepairForm()">+ New Repair Call</button></div>
+<div class="shop">
+<div class="panel">
+<h3>Log a Repair Call</h3>
+<div class="field"><label>Customer name</label><input id="rname" placeholder="Customer name"></div>
+<div class="field"><label>Mobile number</label><input id="rphone" placeholder="10-digit mobile number"></div>
+<div class="field"><label>Device</label><input id="rdevice" placeholder="Desktop / Laptop / Printer"></div>
+<div class="field"><label>Problem reported</label><textarea id="rproblem" placeholder="Describe the issue"></textarea></div>
+<div class="field"><label>Priority</label><select id="rpriority"><option>Normal</option><option>High</option><option>Urgent</option></select></div>
+<button class="btn primary" onclick="saveRepairFromForm()">Create Repair Call</button>
+</div>
+<div class="panel">
+<h3>Customer Tracking</h3>
+<p class="small">For now, repair details are managed by the shop. Customers can call or WhatsApp the shop with their repair call number.</p>
+<div class="notice">🔒 <strong>Admin dashboard:</strong> full repair records and status changes are protected by the Admin login.</div>
+<div style="margin-top:16px"><button class="btn secondary" onclick="openAdmin()">Admin Login</button></div>
+</div>
+</div></div></section>
+
+<section id="shop"><div class="container"><div class="sectionhead"><div><h2>Plan Your Shop Visit</h2><p>Send your requirement before visiting. No online payment.</p></div></div><div class="shop">
+<div class="panel"><h3>Visit Request</h3><div class="field"><label>Your name</label><input id="vname" placeholder="Enter your name"></div><div class="field"><label>Phone</label><input id="vphone" placeholder="10-digit mobile number"></div><div class="field"><label>Requirement</label><textarea id="vmsg" placeholder="Example: Need 16GB RAM + 1TB SSD"></textarea></div><button class="btn primary" onclick="sendVisit()">Prepare WhatsApp Request</button><p class="small">This opens WhatsApp with your request. Replace the shop WhatsApp number in the code before publishing.</p></div>
+<div class="panel"><h3>Payment Policy</h3><div class="upi">₹ UPI at Shop</div><p>For now, payment is available <strong>only after visiting the shop</strong>. You can use UPI at the shop after the final product/service quotation is confirmed.</p><div class="notice">🔐 No card/UPI payment is collected through this website.</div><div style="margin-top:18px"><b>Shop Location</b><p class="small">Add your exact shop address, Google Maps link and working hours in the Team Update section/code.</p></div></div>
+</div></div></section>
+
+<section id="team" class="admin"><div class="container"><div class="sectionhead"><div><h2>Team Update</h2><p>Simple browser-based product management for your first version.</p></div></div><div class="panel">
+<p class="small">The team can add/edit products from this page. Data is saved in the browser using localStorage. This is intentionally a zero-backend setup. For multiple staff devices, move the product data later to a database or Google Sheet/API.</p>
+<div class="admin-tools"><button class="btn primary" onclick="openAdmin()">Open Admin Panel</button><button class="btn secondary" onclick="resetProducts()">Reset Demo Products</button></div>
+</div></div></section>
+
+<div id="cartBtn" class="cart" onclick="openVisitList()">Visit List (<span id="cartCount">0</span>)</div>
+<div id="modal" class="modal"><div class="modalbox"><button class="close" onclick="closeModal()">✕</button><div id="modalContent"></div></div></div>
+<div id="toast" class="toast"></div>
+
+<footer><div class="container"><b>KB Computers</b> · Hardware Sales & Service · Local-area customers only · Payment at shop only.<br><span id="year"></span> KB Computers. All rights reserved.</div></footer>
+
+<script>
+const KEY='kb_products_v1';
+const demo=[
+{id:1,name:'16GB DDR4 RAM',desc:'Desktop / laptop memory upgrade',price:'₹2,999',icon:'🧠',tag:'Popular'},
+{id:2,name:'1TB NVMe SSD',desc:'Fast storage upgrade',price:'₹5,499',icon:'💾',tag:'Fast'},
+{id:3,name:'Wireless Keyboard & Mouse',desc:'Everyday desktop accessory',price:'₹899',icon:'⌨️',tag:'Value'},
+{id:4,name:'650W Power Supply',desc:'Reliable PSU for desktop builds',price:'₹3,499',icon:'⚡',tag:'Build'}
+];
+function getProducts(){try{return JSON.parse(localStorage.getItem(KEY))||demo}catch(e){return demo}}
+function saveProducts(p){localStorage.setItem(KEY,JSON.stringify(p))}
+function render(){
+const p=getProducts(); const g=document.getElementById('productGrid');
+g.innerHTML=p.map(x=>`<article class="product"><div class="icon">${x.icon||'🖥️'}</div><span class="tag">${x.tag||'Available'}</span><h3>${esc(x.name)}</h3><p>${esc(x.desc)}</p><div class="price">${esc(x.price||'Ask at shop')}</div><button class="btn secondary" style="width:100%" onclick="addItem(${x.id})">Add to Visit List</button></article>`).join('');
+}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function addItem(id){let c=JSON.parse(localStorage.getItem('kb_cart')||'[]');if(!c.includes(id))c.push(id);localStorage.setItem('kb_cart',JSON.stringify(c));updateCart();toast('Added to your visit list');}
+function updateCart(){let c=JSON.parse(localStorage.getItem('kb_cart')||'[]');document.getElementById('cartCount').textContent=c.length;document.getElementById('cartBtn').classList.toggle('show',c.length>0)}
+function openVisitList(){let c=JSON.parse(localStorage.getItem('kb_cart')||'[]');let p=getProducts().filter(x=>c.includes(x.id));document.getElementById('modalContent').innerHTML=`<h2>Your Visit List</h2><p class="small">Bring this list to the shop. Prices and stock are confirmed at the shop.</p>${p.map(x=>`<div class="notice" style="margin:8px 0">${esc(x.name)} — <b>${esc(x.price)}</b></div>`).join('')}<button class="btn primary" style="width:100%;margin-top:12px" onclick="sendList()">Prepare WhatsApp List</button><button class="btn secondary" style="width:100%;margin-top:8px" onclick="clearCart()">Clear List</button>`;openModal()}
+function clearCart(){localStorage.removeItem('kb_cart');updateCart();closeModal();toast('Visit list cleared')}
+function sendList(){let c=JSON.parse(localStorage.getItem('kb_cart')||'[]');let p=getProducts().filter(x=>c.includes(x.id));let msg='Hello KB Computers, I would like to visit the shop for:%0A'+p.map(x=>'• '+x.name).join('%0A');window.open('https://wa.me/919843162978?text='+msg,'_blank')}
+function sendVisit(){let n=document.getElementById('vname').value.trim(),ph=document.getElementById('vphone').value.trim(),m=document.getElementById('vmsg').value.trim();if(!n||!ph||!m){toast('Please complete all fields');return}let msg=`Hello KB Computers,%0AName: ${encodeURIComponent(n)}%0APhone: ${encodeURIComponent(ph)}%0ARequirement: ${encodeURIComponent(m)}`;window.open('https://wa.me/919843162978?text='+msg,'_blank')}
+function getRepairs(){try{let r=JSON.parse(localStorage.getItem('kb_repairs_v1'))||[];return r.map(x=>{if(['New','Received','Diagnosing','Waiting Approval','Repairing','Ready','Delivered'].includes(x.status))x.status='Open';return x})}catch(e){return[]}}
+function saveRepairs(r){localStorage.setItem('kb_repairs_v1',JSON.stringify(r))}
+function newRepairId(){let d=new Date();let n=String(d.getTime()).slice(-6);return 'KB-R'+n}
+function saveRepairFromForm(){
+ let name=document.getElementById('rname').value.trim(),phone=document.getElementById('rphone').value.trim(),
+ device=document.getElementById('rdevice').value.trim(),problem=document.getElementById('rproblem').value.trim(),
+ priority=document.getElementById('rpriority').value;
+ if(!name||!phone||!device||!problem){toast('Please complete all repair fields');return}
+ let r=getRepairs();
+ r.unshift({id:newRepairId(),date:new Date().toLocaleString('en-IN'),name,phone,device,problem,priority,status:'Open',assigned:'',estimate:'',notes:''});
+ saveRepairs(r);
+ ['rname','rphone','rdevice','rproblem'].forEach(id=>document.getElementById(id).value='');
+ toast('Repair call logged successfully');
+}
+function openRepairForm(){document.getElementById('repairs').scrollIntoView({behavior:'smooth'});document.getElementById('rname').focus()}
+function openAdmin(){
+ document.getElementById('modalContent').innerHTML=`<h2>Admin Login</h2>
+ <p class="small">Admin access controls product updates and repair call records.</p>
+ <div class="field"><label>Admin PIN</label><input id="pin" type="password" placeholder="Enter Admin PIN"></div>
+ <button class="btn primary" onclick="checkPin()">Login</button>`;
+ openModal();
+}
+function checkPin(){
+ if(document.getElementById('pin').value!=='4565'){toast('Incorrect Admin PIN');return}
+ renderAdmin();
+}
+function renderAdmin(){
+ let p=getProducts(), r=getRepairs();
+ document.getElementById('modalContent').innerHTML=`<h2>Admin Dashboard</h2>
+ <div class="mini" style="margin-bottom:18px">
+ <div><b>${r.filter(x=>x.status==='Open').length}</b><span>Open</span></div>
+ <div><b>${r.filter(x=>x.status==='Hold').length}</b><span>On Hold</span></div>
+ <div><b>${r.filter(x=>x.status==='Closed').length}</b><span>Closed</span></div>
+ <div><b>${p.length}</b><span>Products</span></div>
+ </div>
+ <div class="admin-tools">
+ <button class="btn primary" onclick="renderRepairAdmin()">Repair Calls</button>
+ <button class="btn secondary" onclick="renderProductAdmin()">Products</button>
+ </div>
+ <div id="adminBody" style="margin-top:20px"></div>`;
+ renderRepairAdmin();
+}
+function renderRepairAdmin(){
+ let r=getRepairs();
+ let q=(document.getElementById('repairSearch')?.value||'').toLowerCase();
+ if(q) r=r.filter(x=>(x.id+x.name+x.phone+x.device+x.problem+x.status).toLowerCase().includes(q));
+ document.getElementById('adminBody').innerHTML=`<h3>Repair Call Log</h3>
+ <div class="field"><input id="repairSearch" placeholder="Search call no, customer, phone, device..." value="${esc(q)}" oninput="renderRepairAdmin()"></div>
+ ${r.length?r.map(x=>`<div class="notice" style="margin:10px 0">
+ <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+ <div><b>${esc(x.id)}</b> · ${esc(x.date)}<br><strong>${esc(x.name)}</strong> · ${esc(x.phone)}<br>${esc(x.device)} — ${esc(x.problem)}</div>
+ <span class="tag">${esc(x.status)}</span></div>
+ <div class="mini" style="margin-top:12px">
+ <div><span>Priority</span><b>${esc(x.priority)}</b></div>
+ <div><span>Assigned</span><b>${esc(x.assigned||'Not assigned')}</b></div>
+ <div><span>Estimate</span><b>${esc(x.estimate||'Not set')}</b></div>
+ <div><span>Notes</span><b>${esc(x.notes||'-')}</b></div>
+ </div>
+ <div class="status-actions">
+ <button class="status-btn open ${x.status==='Open'?'active':''}" onclick="updateRepair('${x.id}','status','Open')">🟢 Open</button>
+ <button class="status-btn hold ${x.status==='Hold'?'active':''}" onclick="updateRepair('${x.id}','status','Hold')">🟡 Hold</button>
+ <button class="status-btn closed ${x.status==='Closed'?'active':''}" onclick="updateRepair('${x.id}','status','Closed')">🔴 Closed</button>
+ </div>
+ <div class="admin-tools" style="margin-top:10px">
+ <button class="btn secondary" onclick="editRepair('${x.id}')">Edit Details</button>
+ <button class="btn secondary" onclick="deleteRepair('${x.id}')">Delete Entry</button>
+ </div></div>`).join(''):'<div class="empty">No repair calls found.</div>'}`;
+}
+function updateRepair(id,key,value){let r=getRepairs(),x=r.find(a=>a.id===id);if(x){x[key]=value;saveRepairs(r);toast('Repair status updated')}}
+function editRepair(id){
+ let x=getRepairs().find(a=>a.id===id);if(!x)return;
+ document.getElementById('adminBody').innerHTML=`<h3>Edit ${esc(x.id)}</h3>
+ <div class="field"><label>Customer</label><input id="ername" value="${esc(x.name)}"></div>
+ <div class="field"><label>Phone</label><input id="erphone" value="${esc(x.phone)}"></div>
+ <div class="field"><label>Device</label><input id="erdevice" value="${esc(x.device)}"></div>
+ <div class="field"><label>Problem</label><textarea id="erproblem">${esc(x.problem)}</textarea></div>
+ <div class="field"><label>Assigned staff</label><input id="erassigned" value="${esc(x.assigned)}" placeholder="Staff name"></div>
+ <div class="field"><label>Estimate</label><input id="erestimate" value="${esc(x.estimate)}" placeholder="₹"></div>
+ <div class="field"><label>Internal notes</label><textarea id="ernotes">${esc(x.notes)}</textarea></div>
+ <button class="btn primary" onclick="saveRepairEdit('${x.id}')">Save Changes</button>
+ <button class="btn secondary" onclick="renderRepairAdmin()">Cancel</button>`;
+}
+function saveRepairEdit(id){
+ let r=getRepairs(),x=r.find(a=>a.id===id);if(!x)return;
+ x.name=document.getElementById('ername').value;x.phone=document.getElementById('erphone').value;x.device=document.getElementById('erdevice').value;
+ x.problem=document.getElementById('erproblem').value;x.assigned=document.getElementById('erassigned').value;x.estimate=document.getElementById('erestimate').value;x.notes=document.getElementById('ernotes').value;
+ saveRepairs(r);toast('Repair details saved');renderRepairAdmin();
+}
+function deleteRepair(id){
+ let x=getRepairs().find(a=>a.id===id);
+ if(!x)return;
+ if(confirm('Delete repair call '+x.id+'? This should only be used for test/incorrect entries.')){
+  saveRepairs(getRepairs().filter(a=>a.id!==id));
+  renderRepairAdmin();
+  toast('Repair entry deleted');
+ }
+}
+function renderProductAdmin(){
+ let p=getProducts();
+ document.getElementById('adminBody').innerHTML=`<h3>Manage Products</h3>
+ <div class="field"><label>Product name</label><input id="an" placeholder="e.g. 512GB SSD"></div>
+ <div class="field"><label>Description</label><input id="ad" placeholder="Short description"></div>
+ <div class="field"><label>Price shown</label><input id="ap" placeholder="e.g. ₹2,499"></div>
+ <div class="field"><label>Icon</label><input id="ai" placeholder="💾"></div>
+ <div class="field"><label>Tag</label><input id="at" placeholder="Popular"></div>
+ <button class="btn primary" onclick="addProduct()">Add Product</button><hr style="border-color:#20344d;margin:22px 0">
+ <div id="adminList">${p.map(x=>`<div class="notice" style="display:flex;justify-content:space-between;gap:10px;align-items:center"><span>${esc(x.icon)} ${esc(x.name)}<br><small>${esc(x.price)}</small></span><button class="btn secondary" onclick="deleteProduct(${x.id})">Delete</button></div>`).join('')}</div>`;
+}
+function addProduct(){let p=getProducts();let name=document.getElementById('an').value.trim();if(!name){toast('Product name required');return}p.push({id:Date.now(),name,desc:document.getElementById('ad').value,price:document.getElementById('ap').value||'Ask at shop',icon:document.getElementById('ai').value||'🖥️',tag:document.getElementById('at').value||'Available'});saveProducts(p);render();renderProductAdmin();toast('Product added')}
+function deleteProduct(id){saveProducts(getProducts().filter(x=>x.id!==id));render();renderProductAdmin();toast('Product deleted')}
+function resetProducts(){if(confirm('Reset products to demo list?')){saveProducts(demo);render();toast('Demo products restored')}}
+function openModal(){document.getElementById('modal').classList.add('open')}
+function closeModal(){document.getElementById('modal').classList.remove('open')}
+function toast(t){let x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),2200)}
+document.getElementById('year').textContent=new Date().getFullYear();
+render();updateCart();
+</script>
+</body>
+</html>
