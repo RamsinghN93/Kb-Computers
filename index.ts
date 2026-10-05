@@ -1,41 +1,33 @@
 /**
  * KB Computers – Cloudflare Worker + D1
- * -------------------------------------
- * Endpoints:
- *   GET  /products              → list products with live stock
- *   POST /stock/reserve         → decrease stock when user sends WhatsApp list
- *   POST /repairs               → create repair call
- *   GET  /repairs/track         → track repair by id + phone
- *
- * Security:
- *   - Strict input cleaning
- *   - Server-side validation
- *   - CORS restricted to your domains
- *   - No secrets in the frontend
+ * Secure Admin included
  */
 
 export interface Env {
   DB: D1Database;
 }
 
-// ---------- CONFIG ----------
-// Add your GitHub Pages domain and local testing origins here
+// ========== CONFIG ==========
 const ALLOWED_ORIGINS = [
   "https://ramsinghn93.github.io",
   "http://localhost:5500",
   "http://127.0.0.1:5500",
 ];
+
+// Admin password (checked only on server)
+const ADMIN_PASSWORD = "Kb@dmin2026!";
+
 const MAX_NAME = 80;
 const MAX_TEXT = 1000;
 const MAX_ID = 32;
 
-// ---------- HELPERS ----------
+// ========== HELPERS ==========
 function corsHeaders(origin: string | null): HeadersInit {
   const allow = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
     "Access-Control-Allow-Origin": allow,
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Headers": "Content-Type, X-Admin-Password",
     "Access-Control-Max-Age": "86400",
   };
 }
@@ -69,19 +61,23 @@ function makeId(): string {
   return "KB-" + crypto.randomUUID().replaceAll("-", "").slice(0, 10).toUpperCase();
 }
 
-// ---------- MAIN ----------
+function isAdmin(request: Request): boolean {
+  const pass = request.headers.get("X-Admin-Password") || "";
+  return pass === ADMIN_PASSWORD;
+}
+
+// ========== MAIN ==========
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const origin = request.headers.get("Origin");
     const url = new URL(request.url);
 
-    // CORS preflight
     if (request.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: corsHeaders(origin) });
     }
 
     try {
-      // ========== GET /products ==========
+      // ========== PUBLIC: GET /products ==========
       if (request.method === "GET" && url.pathname === "/products") {
         const { results } = await env.DB.prepare(
           "SELECT id, name, price, icon, tag, stock FROM products ORDER BY id"
@@ -89,23 +85,16 @@ export default {
         return json(results ?? [], 200, origin);
       }
 
-      // ========== POST /stock/reserve ==========
-      // Body: { items: [ { id: "p1", qty: 1 }, ... ] }
-      // Decreases stock only if enough is available
+      // ========== PUBLIC: POST /stock/reserve ==========
       if (request.method === "POST" && url.pathname === "/stock/reserve") {
         let body: any;
-        try {
-          body = await request.json();
-        } catch {
+        try { body = await request.json(); } catch {
           return json({ error: "Invalid JSON" }, 400, origin);
         }
 
         const items = Array.isArray(body?.items) ? body.items : [];
-        if (items.length === 0) {
-          return json({ error: "No items provided" }, 400, origin);
-        }
+        if (items.length === 0) return json({ error: "No items provided" }, 400, origin);
 
-        // Validate and normalise
         const cleanItems: { id: string; qty: number }[] = [];
         for (const item of items) {
           const id = cleanText(item?.id, 40);
@@ -113,17 +102,11 @@ export default {
           if (!id || qty < 1) continue;
           cleanItems.push({ id, qty });
         }
+        if (cleanItems.length === 0) return json({ error: "No valid items" }, 400, origin);
 
-        if (cleanItems.length === 0) {
-          return json({ error: "No valid items" }, 400, origin);
-        }
-
-        // Check stock availability first
         for (const item of cleanItems) {
-          const row = await env.DB.prepare(
-            "SELECT stock FROM products WHERE id = ?"
-          ).bind(item.id).first<{ stock: number }>();
-
+          const row = await env.DB.prepare("SELECT stock FROM products WHERE id = ?")
+            .bind(item.id).first<{ stock: number }>();
           if (!row || row.stock < item.qty) {
             return json({
               error: "Not enough stock",
@@ -134,22 +117,18 @@ export default {
           }
         }
 
-        // Decrement stock
         for (const item of cleanItems) {
           await env.DB.prepare(
             "UPDATE products SET stock = stock - ? WHERE id = ? AND stock >= ?"
           ).bind(item.qty, item.id, item.qty).run();
         }
-
         return json({ success: true, message: "Stock reserved" }, 200, origin);
       }
 
-      // ========== POST /repairs ==========
+      // ========== PUBLIC: POST /repairs ==========
       if (request.method === "POST" && url.pathname === "/repairs") {
         let body: any;
-        try {
-          body = await request.json();
-        } catch {
+        try { body = await request.json(); } catch {
           return json({ error: "Invalid JSON" }, 400, origin);
         }
 
@@ -180,7 +159,7 @@ export default {
         }, 201, origin);
       }
 
-      // ========== GET /repairs/track ==========
+      // ========== PUBLIC: GET /repairs/track ==========
       if (request.method === "GET" && url.pathname === "/repairs/track") {
         const id = cleanText(url.searchParams.get("id"), MAX_ID).toUpperCase();
         const phone = cleanPhone(url.searchParams.get("phone"));
@@ -194,11 +173,75 @@ export default {
            FROM repairs WHERE id = ? AND phone = ?`
         ).bind(id, phone).first();
 
-        if (!row) {
-          return json({ error: "No matching repair call found" }, 404, origin);
+        if (!row) return json({ error: "No matching repair call found" }, 404, origin);
+        return json(row, 200, origin);
+      }
+
+      // ========== ADMIN: GET /admin/repairs ==========
+      if (request.method === "GET" && url.pathname === "/admin/repairs") {
+        if (!isAdmin(request)) return json({ error: "Unauthorized" }, 401, origin);
+
+        const { results } = await env.DB.prepare(
+          "SELECT * FROM repairs ORDER BY created DESC"
+        ).all();
+        return json(results ?? [], 200, origin);
+      }
+
+      // ========== ADMIN: POST /admin/status ==========
+      if (request.method === "POST" && url.pathname === "/admin/status") {
+        if (!isAdmin(request)) return json({ error: "Unauthorized" }, 401, origin);
+
+        let body: any;
+        try { body = await request.json(); } catch {
+          return json({ error: "Invalid JSON" }, 400, origin);
         }
 
-        return json(row, 200, origin);
+        const id = cleanText(body.id, MAX_ID).toUpperCase();
+        const status = cleanText(body.status, 50);
+
+        const allowed = ["Awaiting Accessories", "In Progress", "Ready for Pickup", "Completed", "Cancelled"];
+        if (!id || !allowed.includes(status)) {
+          return json({ error: "Invalid id or status" }, 400, origin);
+        }
+
+        const result = await env.DB.prepare(
+          "UPDATE repairs SET status = ? WHERE id = ?"
+        ).bind(status, id).run();
+
+        if (result.meta.changes === 0) return json({ error: "Repair not found" }, 404, origin);
+        return json({ success: true, message: "Status updated" }, 200, origin);
+      }
+
+      // ========== ADMIN: GET /admin/products ==========
+      if (request.method === "GET" && url.pathname === "/admin/products") {
+        if (!isAdmin(request)) return json({ error: "Unauthorized" }, 401, origin);
+
+        const { results } = await env.DB.prepare(
+          "SELECT id, name, price, stock FROM products ORDER BY id"
+        ).all();
+        return json(results ?? [], 200, origin);
+      }
+
+      // ========== ADMIN: POST /admin/stock ==========
+      if (request.method === "POST" && url.pathname === "/admin/stock") {
+        if (!isAdmin(request)) return json({ error: "Unauthorized" }, 401, origin);
+
+        let body: any;
+        try { body = await request.json(); } catch {
+          return json({ error: "Invalid JSON" }, 400, origin);
+        }
+
+        const id = cleanText(body.id, 40);
+        const stock = Math.max(0, Math.min(9999, Math.floor(Number(body.stock) || 0)));
+
+        if (!id) return json({ error: "Invalid product id" }, 400, origin);
+
+        const result = await env.DB.prepare(
+          "UPDATE products SET stock = ? WHERE id = ?"
+        ).bind(stock, id).run();
+
+        if (result.meta.changes === 0) return json({ error: "Product not found" }, 404, origin);
+        return json({ success: true, message: "Stock updated", stock }, 200, origin);
       }
 
       return json({ error: "Not found" }, 404, origin);

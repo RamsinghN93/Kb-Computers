@@ -1,23 +1,290 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KB Computers | Admin</title>
-<style>
-:root{--bg:#f5f7fb;--card:#fff;--text:#182230;--muted:#687386;--primary:#2563eb;--primary2:#1d4ed8;--line:#e5e7eb;--green:#15803d;--yellow:#a16207;--red:#dc2626;--shadow:0 10px 30px rgba(15,23,42,.08)}*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}.wrap{max-width:1180px;margin:auto;padding:0 18px}.top{background:#0f172a;color:#fff;box-shadow:0 4px 20px #0002}.nav{height:68px;display:flex;align-items:center;justify-content:space-between}.brand{font-size:21px;font-weight:800}.brand span{color:#60a5fa}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}.section{padding:40px 0}.form{padding:22px}.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.field{display:flex;flex-direction:column;gap:7px}.field label{font-size:13px;font-weight:800}.field input{width:100%;border:1px solid #d6dbe4;border-radius:10px;padding:11px 12px;font:inherit}.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer;background:var(--primary);color:#fff}.btn:hover{background:var(--primary2)}.btn.secondary{background:#eaf0ff;color:#1744a0}.btn.danger{background:#fee2e2;color:#991b1b}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}.admin-panel{display:none}.admin-panel.show{display:block}.admin-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:850px}.table th,.table td{padding:12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}.table th{font-size:12px;text-transform:uppercase;color:var(--muted)}.mini-actions{display:flex;gap:6px;flex-wrap:wrap}.mini-actions .btn{padding:7px 9px;font-size:12px}.status-pill{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:999px;font-weight:800;font-size:13px}.status-open{background:#dcfce7;color:#166534}.status-received{background:#dbeafe;color:#1d4ed8}.status-pending{background:#f3f4f6;color:#4b5563}.status-hold{background:#fef3c7;color:#92400e}.status-closed{background:#fee2e2;color:#991b1b}.notice{padding:13px 15px;border-radius:12px;background:#eff6ff;color:#1e40af;margin:14px 0}.empty{padding:25px;text-align:center;color:var(--muted);border:1px dashed #cbd5e1;border-radius:14px}.muted{color:var(--muted)}.small{font-size:12px}@media(max-width:600px){.form-grid{grid-template-columns:1fr}}
-</style></head><body>
-<header class="top"><div class="wrap nav"><div class="brand">KB <span>Computers</span> — Admin</div><button class="btn secondary" onclick="location.href='index.html'">Customer Website</button></div></header>
-<main class="section"><div class="wrap">
-<div id="loginBox" class="card form"><h2>🔐 Admin Login</h2><p class="muted">Private administration area.</p><div class="field"><label>Admin PIN</label><input id="adminPin" type="password" inputmode="numeric" maxlength="4" placeholder="4 digit PIN"></div><div class="actions"><button class="btn" onclick="adminLogin()">Login</button></div></div>
-<div id="adminPanel" class="admin-panel"><div class="admin-head"><div><h2>Admin Dashboard</h2><div class="muted">Manage products, stock and repair calls.</div></div><button class="btn secondary" onclick="adminLogout()">Logout</button></div>
-<div class="card form" style="margin-bottom:16px"><h3>Add / Update Product</h3><input id="pId" type="hidden"><div class="form-grid"><div class="field"><label>Product Name</label><input id="pName"></div><div class="field"><label>Price (₹)</label><input id="pPrice" type="number" min="0"></div><div class="field"><label>Icon</label><input id="pIcon" placeholder="💾"></div><div class="field"><label>Tag</label><input id="pTag" placeholder="Popular"></div><div class="field"><label>Stock Quantity</label><input id="pStock" type="number" min="0" value="0"></div></div><div class="actions"><button class="btn" onclick="saveProduct()">Save Product</button><button class="btn secondary" onclick="clearProductForm()">Clear</button><button class="btn danger" onclick="resetDemo()">Reset Demo Data</button></div></div>
-<h3>Products & Stock</h3><div id="adminProducts"></div><h3 style="margin-top:28px">Repair Calls</h3><div id="adminRepairs"></div>
-</div></div></main>
-<script>
-const ADMIN_PIN='4565',PRODUCTS_KEY='kb_products_v2',REPAIRS_KEY='kb_repairs_v2';
-const demoProducts=[{id:'p1',name:'16GB DDR4 RAM',price:2999,icon:'🧠',tag:'Popular',stock:5},{id:'p2',name:'1TB NVMe SSD',price:5499,icon:'💾',tag:'Fast',stock:3},{id:'p3',name:'Wireless Keyboard & Mouse',price:899,icon:'⌨️',tag:'Value',stock:8},{id:'p4',name:'650W Power Supply',price:3499,icon:'⚡',tag:'Build',stock:2}];
-function read(k,f){try{return JSON.parse(localStorage.getItem(k))??f}catch(e){return f}}function write(k,v){localStorage.setItem(k,JSON.stringify(v))}function products(){let p=read(PRODUCTS_KEY,null);if(!p){p=demoProducts;write(PRODUCTS_KEY,p)}return p}function repairs(){return read(REPAIRS_KEY,[])}function money(n){return '₹'+Number(n||0).toLocaleString('en-IN')}function esc(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
-function adminLogin(){if(document.getElementById('adminPin').value===ADMIN_PIN){sessionStorage.setItem('kb_admin','1');showAdmin()}else alert('Incorrect admin PIN.')}function adminLogout(){sessionStorage.removeItem('kb_admin');showAdmin()}function showAdmin(){const ok=sessionStorage.getItem('kb_admin')==='1';document.getElementById('loginBox').style.display=ok?'none':'block';document.getElementById('adminPanel').classList.toggle('show',ok);if(ok)renderAdmin()}
-function saveProduct(){if(sessionStorage.getItem('kb_admin')!=='1')return;const id=document.getElementById('pId').value||'p'+Date.now(),p={id,name:document.getElementById('pName').value.trim(),price:Number(document.getElementById('pPrice').value||0),icon:document.getElementById('pIcon').value.trim()||'🖥️',tag:document.getElementById('pTag').value.trim(),stock:Math.max(0,Number(document.getElementById('pStock').value||0))};if(!p.name){alert('Enter product name.');return}let ps=products(),i=ps.findIndex(x=>x.id===id);if(i>=0)ps[i]=p;else ps.push(p);write(PRODUCTS_KEY,ps);clearProductForm();renderAdmin()}
-function editProduct(id){const p=products().find(x=>x.id===id);if(!p)return;document.getElementById('pId').value=p.id;document.getElementById('pName').value=p.name;document.getElementById('pPrice').value=p.price;document.getElementById('pIcon').value=p.icon||'';document.getElementById('pTag').value=p.tag||'';document.getElementById('pStock').value=p.stock||0;window.scrollTo({top:0,behavior:'smooth'})}function deleteProduct(id){if(!confirm('Delete this product?'))return;write(PRODUCTS_KEY,products().filter(x=>x.id!==id));renderAdmin()}function updateStock(id){const p=products().find(x=>x.id===id);if(!p)return;const n=prompt('Enter new stock quantity:',p.stock);if(n===null)return;p.stock=Math.max(0,parseInt(n,10)||0);write(PRODUCTS_KEY,products());renderAdmin()}
-function updateRepair(id,status){const a=repairs(),r=a.find(x=>x.id===id);if(!r)return;if(status==='Open'&&r.status!=='Accessories Received'){alert('Please mark Accessories Received before opening the repair.');return}r.status=status;write(REPAIRS_KEY,a);renderAdmin()}function editRepair(id){const r=repairs().find(x=>x.id===id);if(!r)return;let v=prompt('Customer name:',r.name);if(v===null)return;r.name=v;v=prompt('Mobile number:',r.phone);if(v===null)return;r.phone=String(v).replace(/\D/g,'').slice(-10);v=prompt('Device:',r.device);if(v===null)return;r.device=v;v=prompt('Problem:',r.problem);if(v===null)return;r.problem=v;write(REPAIRS_KEY,repairs());renderAdmin()}function deleteRepair(id){if(!confirm('Delete this repair entry? Use this for test/incorrect entries.'))return;write(REPAIRS_KEY,repairs().filter(x=>x.id!==id));renderAdmin()}
-function clearProductForm(){['pId','pName','pPrice','pIcon','pTag','pStock'].forEach(id=>document.getElementById(id).value='');document.getElementById('pStock').value='0'}function resetDemo(){if(!confirm('Reset products to demo stock and remove all repair calls?'))return;write(PRODUCTS_KEY,demoProducts);write(REPAIRS_KEY,[]);renderAdmin()}
-function renderAdmin(){if(sessionStorage.getItem('kb_admin')!=='1')return;const ps=products();document.getElementById('adminProducts').innerHTML='<div class="table-wrap"><table class="table"><thead><tr><th>Product</th><th>Price</th><th>Stock</th><th>Actions</th></tr></thead><tbody>'+ps.map(p=>`<tr><td>${esc(p.name)}</td><td>${money(p.price)}</td><td><strong>${p.stock}</strong></td><td><div class="mini-actions"><button class="btn" onclick="updateStock('${p.id}')">Update Stock</button><button class="btn secondary" onclick="editProduct('${p.id}')">Edit</button><button class="btn danger" onclick="deleteProduct('${p.id}')">Delete</button></div></td></tr>`).join('')+'</tbody></table></div>';const rs=repairs();document.getElementById('adminRepairs').innerHTML=rs.length?'<div class="table-wrap"><table class="table"><thead><tr><th>Call</th><th>Customer</th><th>Device</th><th>Status</th><th>Actions</th></tr></thead><tbody>'+rs.map(r=>`<tr><td><strong>${esc(r.id)}</strong><br><span class="small muted">${esc(r.phone)}</span></td><td>${esc(r.name)}</td><td>${esc(r.device)}<br><span class="small muted">${esc(r.problem)}</span></td><td><span class="status-pill ${r.status==='Awaiting Accessories'?'status-pending':r.status==='Accessories Received'?'status-received':r.status==='Open'?'status-open':r.status==='Hold'?'status-hold':'status-closed'}">${r.status}</span></td><td><div class="mini-actions"><button class="btn" style="background:#2563eb" onclick="updateRepair('${r.id}','Accessories Received')">📦 Accessories Received</button><button class="btn" onclick="updateRepair('${r.id}','Open')">🟢 Open</button><button class="btn" style="background:#a16207" onclick="updateRepair('${r.id}','Hold')">🟡 Hold</button><button class="btn danger" onclick="updateRepair('${r.id}','Closed')">🔴 Closed</button><button class="btn secondary" onclick="editRepair('${r.id}')">Edit Details</button><button class="btn danger" onclick="deleteRepair('${r.id}')">Delete Entry</button></div></td></tr>`).join('')+'</tbody></table></div>':'<div class="empty">No repair calls.</div>'}showAdmin();
-</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://*.workers.dev; img-src 'self' data:;">
+  <title>KB Computers – Admin</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #3b82f6;
+      --danger: #ef4444;
+      --success: #22c55e;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+      padding: 16px;
+    }
+    .container { max-width: 900px; margin: 0 auto; }
+    h1 { font-size: 1.5rem; margin-bottom: 8px; }
+    h2 { font-size: 1.2rem; margin: 24px 0 12px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    input, select, button {
+      font: inherit;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      width: 100%;
+      margin-top: 6px;
+    }
+    button {
+      background: var(--accent);
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 12px;
+    }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    button.secondary { background: var(--border); }
+    button.danger { background: var(--danger); }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .row > * { flex: 1; min-width: 120px; }
+    .hidden { display: none !important; }
+    .msg { padding: 10px; border-radius: 8px; margin: 10px 0; font-size: 0.9rem; }
+    .msg.error { background: #7f1d1d; color: #fecaca; }
+    .msg.success { background: #14532d; color: #bbf7d0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th, td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--border); }
+    th { color: var(--muted); font-weight: 500; }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge.pending { background: #422006; color: #fbbf24; }
+    .badge.progress { background: #1e3a5f; color: #60a5fa; }
+    .badge.ready { background: #14532d; color: #4ade80; }
+    .badge.done { background: #1e293b; color: #94a3b8; }
+    .badge.cancel { background: #450a0a; color: #f87171; }
+    .stock-input { width: 80px; }
+    #loginBox { max-width: 360px; margin: 60px auto; }
+    .small { font-size: 0.85rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- LOGIN -->
+    <div id="loginBox" class="card">
+      <h1>Admin Login</h1>
+      <p class="small">KB Computers – Secure Admin Panel</p>
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Enter admin password" autocomplete="current-password">
+      <button id="loginBtn">Login</button>
+      <div id="loginMsg" class="msg hidden"></div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="hidden">
+      <div class="row" style="align-items:center; margin-bottom:16px;">
+        <h1 style="flex:1;">KB Admin</h1>
+        <button class="secondary" id="logoutBtn" style="width:auto;">Logout</button>
+      </div>
+
+      <!-- STOCK -->
+      <div class="card">
+        <h2>Product Stock</h2>
+        <div id="stockMsg" class="msg hidden"></div>
+        <div id="stockTable"></div>
+      </div>
+
+      <!-- REPAIRS -->
+      <div class="card">
+        <h2>Repair Calls</h2>
+        <div id="repairMsg" class="msg hidden"></div>
+        <div id="repairTable"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = "https://kb-computers-api.nramsingh93.workers.dev";
+    let adminPass = "";
+
+    const $ = (id) => document.getElementById(id);
+
+    function showMsg(el, text, type) {
+      el.textContent = text;
+      el.className = "msg " + type;
+      el.classList.remove("hidden");
+    }
+
+    function hideMsg(el) {
+      el.classList.add("hidden");
+    }
+
+    async function api(path, options = {}) {
+      const headers = {
+        "Content-Type": "application/json",
+        "X-Admin-Password": adminPass,
+        ...(options.headers || {})
+      };
+      const res = await fetch(API_BASE + path, { ...options, headers });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Request failed");
+      return data;
+    }
+
+    // LOGIN
+    $("loginBtn").onclick = async () => {
+      const pass = $("password").value.trim();
+      if (!pass) return showMsg($("loginMsg"), "Enter password", "error");
+
+      adminPass = pass;
+      try {
+        await api("/admin/products");
+        $("loginBox").classList.add("hidden");
+        $("dashboard").classList.remove("hidden");
+        loadStock();
+        loadRepairs();
+      } catch (e) {
+        adminPass = "";
+        showMsg($("loginMsg"), "Wrong password", "error");
+      }
+    };
+
+    $("password").onkeydown = (e) => {
+      if (e.key === "Enter") $("loginBtn").click();
+    };
+
+    $("logoutBtn").onclick = () => {
+      adminPass = "";
+      $("dashboard").classList.add("hidden");
+      $("loginBox").classList.remove("hidden");
+      $("password").value = "";
+      hideMsg($("loginMsg"));
+    };
+
+    // STOCK
+    async function loadStock() {
+      try {
+        const products = await api("/admin/products");
+        let html = `<table><thead><tr><th>Product</th><th>Stock</th><th>Action</th></tr></thead><tbody>`;
+        for (const p of products) {
+          html += `<tr>
+            <td>${escapeHtml(p.name)}</td>
+            <td><input class="stock-input" type="number" min="0" max="9999" value="${p.stock}" data-id="${escapeHtml(p.id)}"></td>
+            <td><button style="width:auto;padding:6px 12px;margin:0;" data-id="${escapeHtml(p.id)}">Save</button></td>
+          </tr>`;
+        }
+        html += `</tbody></table>`;
+        $("stockTable").innerHTML = html;
+
+        $("stockTable").querySelectorAll("button").forEach(btn => {
+          btn.onclick = async () => {
+            const id = btn.dataset.id;
+            const input = $("stockTable").querySelector(`input[data-id="${id}"]`);
+            const stock = parseInt(input.value, 10);
+            try {
+              await api("/admin/stock", {
+                method: "POST",
+                body: JSON.stringify({ id, stock })
+              });
+              showMsg($("stockMsg"), "Stock updated", "success");
+              setTimeout(() => hideMsg($("stockMsg")), 2000);
+            } catch (e) {
+              showMsg($("stockMsg"), e.message, "error");
+            }
+          };
+        });
+      } catch (e) {
+        showMsg($("stockMsg"), e.message, "error");
+      }
+    }
+
+    // REPAIRS
+    async function loadRepairs() {
+      try {
+        const repairs = await api("/admin/repairs");
+        if (!repairs.length) {
+          $("repairTable").textContent = "No repair calls yet.";
+          return;
+        }
+
+        let html = `<table><thead><tr>
+          <th>ID</th><th>Customer</th><th>Device</th><th>Status</th><th>Action</th>
+        </tr></thead><tbody>`;
+
+        for (const r of repairs) {
+          const badgeClass = {
+            "Awaiting Accessories": "pending",
+            "In Progress": "progress",
+            "Ready for Pickup": "ready",
+            "Completed": "done",
+            "Cancelled": "cancel"
+          }[r.status] || "pending";
+
+          html += `<tr>
+            <td class="small">${escapeHtml(r.id)}</td>
+            <td>${escapeHtml(r.name)}<br><span class="small">${escapeHtml(r.phone)}</span></td>
+            <td>${escapeHtml(r.device)}<br><span class="small">${escapeHtml(r.priority)}</span></td>
+            <td><span class="badge ${badgeClass}">${escapeHtml(r.status)}</span></td>
+            <td>
+              <select data-id="${escapeHtml(r.id)}" style="width:auto;min-width:140px;">
+                <option value="Awaiting Accessories">Awaiting Accessories</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Ready for Pickup">Ready for Pickup</option>
+                <option value="Completed">Completed</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+            </td>
+          </tr>`;
+        }
+        html += `</tbody></table>`;
+        $("repairTable").innerHTML = html;
+
+        // Set current values
+        $("repairTable").querySelectorAll("select").forEach(sel => {
+          const row = repairs.find(r => r.id === sel.dataset.id);
+          if (row) sel.value = row.status;
+
+          sel.onchange = async () => {
+            try {
+              await api("/admin/status", {
+                method: "POST",
+                body: JSON.stringify({ id: sel.dataset.id, status: sel.value })
+              });
+              showMsg($("repairMsg"), "Status updated", "success");
+              setTimeout(() => hideMsg($("repairMsg")), 2000);
+              loadRepairs();
+            } catch (e) {
+              showMsg($("repairMsg"), e.message, "error");
+            }
+          };
+        });
+      } catch (e) {
+        showMsg($("repairMsg"), e.message, "error");
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+  </script>
+</body>
+</html>
