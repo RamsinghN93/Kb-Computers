@@ -1,6 +1,6 @@
 # KB Computers – Live Stock + Repair Call System
 
-Complete guide for the KB Computers website with shared live stock, private cart, and repair call system.
+Complete guide for the KB Computers website with shared live stock, private cart, repair call tracking, and secure admin panel.
 
 ---
 
@@ -44,6 +44,25 @@ Complete guide for the KB Computers website with shared live stock, private cart
 
 ---
 
+## Repair Call Status (Color Coded)
+
+When a customer tracks their repair, they see a colored status:
+
+| Status                  | Color     | Meaning                                      |
+|-------------------------|-----------|----------------------------------------------|
+| Awaiting Accessories    | Orange    | Waiting for customer to bring the device     |
+| In Progress             | Blue      | Repair work has started                      |
+| Ready for Pickup        | Green     | Device is ready for collection               |
+| Completed               | Gray      | Repair finished and closed                   |
+| Cancelled               | Red       | Cancelled (reason is shown to customer)      |
+
+**Important:**
+- Status becomes **Completed** only when work is fully finished.
+- If you choose **Cancelled**, the system will ask for a **reason**.
+- The cancellation reason is visible to the customer when they track the call.
+
+---
+
 ## Admin Panel Usage
 
 ### Login
@@ -56,6 +75,7 @@ Complete guide for the KB Computers website with shared live stock, private cart
 - Add new product
 - Edit product (Name, Price, Icon/Emoji, Tag, Stock)
 - Delete product
+- Update stock anytime
 
 **Repair Calls:**
 - View all repair calls
@@ -64,30 +84,18 @@ Complete guide for the KB Computers website with shared live stock, private cart
   - In Progress
   - Ready for Pickup
   - Completed
-  - Cancelled
-
----
-
-## How to Manage Stock (Admin UI)
-
-1. Login to Admin Panel
-2. Scroll to **All Products**
-3. Click **Edit** on any product
-4. Change the stock number
-5. Click **Save Product**
-
-Or add a completely new product using the form at the top.
+  - Cancelled (requires reason)
 
 ---
 
 ## How Customers Use the Site
 
-1. Browse products with live stock
+1. Browse products with **live stock**
 2. Add items to **Shop Visit List** (private cart)
-3. Click **Send List on WhatsApp**
-4. Stock is automatically reduced for everyone
-5. Optionally create a **Repair Call**
-6. Track repair later using Call ID + Mobile number
+3. Click **Send List on WhatsApp** → stock is reduced for everyone
+4. Optionally create a **Repair Call**
+5. Track repair later using **Call ID + Mobile number**
+6. See colored status and messages
 
 ---
 
@@ -95,11 +103,12 @@ Or add a completely new product using the form at the top.
 
 ```
 Kb-Computers/
-├── index.html          # Main website
+├── index.html          # Main website (with colored status tracking)
 ├── admin.html          # Admin panel
 ├── index.ts            # Cloudflare Worker (backend)
 ├── wrangler.toml       # Worker configuration
-└── schema.sql          # Database structure
+├── schema.sql          # Database structure
+└── README.md           # This file
 ```
 
 ---
@@ -144,8 +153,8 @@ UPDATE products SET stock = 10 WHERE id = 'p1';
 -- Change repair status
 UPDATE repairs SET status = 'Completed' WHERE id = 'KB-XXXXXXXXXX';
 
--- Delete a product
-DELETE FROM products WHERE id = 'p5';
+-- See cancelled repairs with reason
+SELECT id, name, status, problem FROM repairs WHERE status = 'Cancelled';
 ```
 
 ---
@@ -158,7 +167,8 @@ DELETE FROM products WHERE id = 'p5';
 - All user inputs are cleaned and validated on the Worker
 - CORS is restricted to your domain only
 - No sensitive data is stored in frontend code
-- No eval, no dangerous innerHTML usage
+- Cancellation requires a proper reason
+- Status colors help customers track progress clearly
 
 ---
 
@@ -184,17 +194,22 @@ const ADMIN_PASSWORD = "Kb@dmin2026!";
 | Products not loading          | Check CORS in `index.ts` (ALLOWED_ORIGINS)    |
 | Admin login fails             | Make sure password matches exactly            |
 | Stock not decreasing          | Check browser console for errors              |
-| Changes not reflecting        | Hard refresh the page (close tab & reopen)    |
+| Status shows wrong color      | Hard refresh the page                         |
+| Cancel without reason         | System will block it and ask for reason       |
+| Changes not reflecting        | Hard refresh (close tab & reopen)             |
 | Worker not updating           | Wait 30–60 seconds after committing on GitHub |
 
 ---
 
-## Future Improvements (Optional)
+## Current Status List (Final)
 
-- Add real image upload using Cloudflare R2
-- Add email/SMS notifications for repair status
-- Add simple analytics (how many lists sent)
-- Add more product fields (description, category)
+These are the only valid statuses:
+
+- `Awaiting Accessories`
+- `In Progress`
+- `Ready for Pickup`
+- `Completed`
+- `Cancelled`
 
 ---
 
@@ -208,6 +223,8 @@ KB Computers System:
 - Admin: /admin.html (Password: Kb@dmin2026!)
 - Cart: localStorage (private)
 - Stock & Repairs: Cloudflare D1 (shared)
+- Status colors: Orange (Awaiting), Blue (In Progress), Green (Ready), Gray (Completed), Red (Cancelled)
+- Cancel requires reason
 - Admin can: Add/Edit/Delete products, change stock, change repair status
 ```
 
