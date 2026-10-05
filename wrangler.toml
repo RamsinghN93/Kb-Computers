@@ -5,4 +5,4 @@ compatibility_date = "2024-09-23"
 [[d1_databases]]
 binding = "DB"
 database_name = "kb-computers-db"
-database_id = "PASTE_YOUR_DATABASE_ID_HERE"
+database_id = "db098e94-b282-4fd7-b63c-117389a53daa"
