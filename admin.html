@@ -149,7 +149,13 @@
 
       <!-- PRODUCT LIST -->
       <div class="card">
-        <h2>All Products</h2>
+        <div class="row" style="align-items:center; gap:10px; margin-bottom:10px;">
+          <h2 style="margin:0; flex:1;">All Products</h2>
+          <span id="productCount" class="small"></span>
+        </div>
+        <div style="margin-bottom:12px;">
+          <input id="productSearch" type="search" placeholder="🔎 Search by product name, ID or tag..." autocomplete="off">
+        </div>
         <div id="stockMsg" class="msg hidden"></div>
         <div id="stockTable"></div>
       </div>
@@ -167,6 +173,7 @@
     const API_BASE = "https://kb-computers-api.nramsingh93.workers.dev";
     let adminPass = "";
     let editingId = null;
+    let allProducts = [];
 
     const $ = (id) => document.getElementById(id);
 
@@ -271,71 +278,89 @@
       }
     };
 
-    // LOAD PRODUCTS
+    // LOAD + SEARCH PRODUCTS
+    function renderProductTable(products) {
+      const countEl = $("productCount");
+      countEl.textContent = `${products.length} of ${allProducts.length} product${allProducts.length === 1 ? "" : "s"}`;
+
+      if (!products.length) {
+        $("stockTable").innerHTML = `<div class="empty" style="padding:20px 0;">No matching products found.</div>`;
+        return;
+      }
+
+      let html = `<table><thead><tr>
+        <th>Icon</th><th>Name</th><th>Price</th><th>Stock</th><th>Tag</th><th>Actions</th>
+      </tr></thead><tbody>`;
+
+      for (const p of products) {
+        html += `<tr>
+          <td style="font-size:1.3rem;">${escapeHtml(p.icon || "📦")}</td>
+          <td>${escapeHtml(p.name)}<br><span class="small">${escapeHtml(p.id)}</span></td>
+          <td>₹${p.price}</td>
+          <td>${p.stock}</td>
+          <td>${escapeHtml(p.tag || "-")}</td>
+          <td>
+            <button class="small" data-edit="${escapeHtml(p.id)}">Edit</button>
+            <button class="small danger" data-del="${escapeHtml(p.id)}">Del</button>
+          </td>
+        </tr>`;
+      }
+      html += `</tbody></table>`;
+      $("stockTable").innerHTML = html;
+
+      $("stockTable").querySelectorAll("[data-edit]").forEach(btn => {
+        btn.onclick = () => {
+          const p = allProducts.find(x => x.id === btn.dataset.edit);
+          if (!p) return;
+          editingId = p.id;
+          $("formTitle").textContent = "Edit Product";
+          $("pId").value = p.id;
+          $("pId").disabled = true;
+          $("pName").value = p.name;
+          $("pPrice").value = p.price;
+          $("pStock").value = p.stock;
+          $("pIcon").value = p.icon || "";
+          $("pTag").value = p.tag || "";
+          $("iconPreview").textContent = p.icon || "";
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        };
+      });
+
+      $("stockTable").querySelectorAll("[data-del]").forEach(btn => {
+        btn.onclick = async () => {
+          if (!confirm("Delete this product?")) return;
+          try {
+            await api("/admin/product/delete", {
+              method: "POST",
+              body: JSON.stringify({ id: btn.dataset.del })
+            });
+            showMsg($("stockMsg"), "Product deleted", "success");
+            loadProducts();
+            setTimeout(() => hideMsg($("stockMsg")), 2000);
+          } catch (e) {
+            showMsg($("stockMsg"), e.message, "error");
+          }
+        };
+      });
+    }
+
+    function filterProducts() {
+      const q = $("productSearch").value.trim().toLowerCase();
+      if (!q) return renderProductTable(allProducts);
+      const filtered = allProducts.filter(p =>
+        String(p.name || "").toLowerCase().includes(q) ||
+        String(p.id || "").toLowerCase().includes(q) ||
+        String(p.tag || "").toLowerCase().includes(q)
+      );
+      renderProductTable(filtered);
+    }
+
+    $("productSearch").oninput = filterProducts;
+
     async function loadProducts() {
       try {
-        const products = await api("/admin/products");
-        if (!products.length) {
-          $("stockTable").textContent = "No products yet.";
-          return;
-        }
-
-        let html = `<table><thead><tr>
-          <th>Icon</th><th>Name</th><th>Price</th><th>Stock</th><th>Tag</th><th>Actions</th>
-        </tr></thead><tbody>`;
-
-        for (const p of products) {
-          html += `<tr>
-            <td style="font-size:1.3rem;">${escapeHtml(p.icon || "📦")}</td>
-            <td>${escapeHtml(p.name)}<br><span class="small">${escapeHtml(p.id)}</span></td>
-            <td>₹${p.price}</td>
-            <td>${p.stock}</td>
-            <td>${escapeHtml(p.tag || "-")}</td>
-            <td>
-              <button class="small" data-edit="${escapeHtml(p.id)}">Edit</button>
-              <button class="small danger" data-del="${escapeHtml(p.id)}">Del</button>
-            </td>
-          </tr>`;
-        }
-        html += `</tbody></table>`;
-        $("stockTable").innerHTML = html;
-
-        // Edit buttons
-        $("stockTable").querySelectorAll("[data-edit]").forEach(btn => {
-          btn.onclick = () => {
-            const p = products.find(x => x.id === btn.dataset.edit);
-            if (!p) return;
-            editingId = p.id;
-            $("formTitle").textContent = "Edit Product";
-            $("pId").value = p.id;
-            $("pId").disabled = true;
-            $("pName").value = p.name;
-            $("pPrice").value = p.price;
-            $("pStock").value = p.stock;
-            $("pIcon").value = p.icon || "";
-            $("pTag").value = p.tag || "";
-            $("iconPreview").textContent = p.icon || "";
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          };
-        });
-
-        // Delete buttons
-        $("stockTable").querySelectorAll("[data-del]").forEach(btn => {
-          btn.onclick = async () => {
-            if (!confirm("Delete this product?")) return;
-            try {
-              await api("/admin/product/delete", {
-                method: "POST",
-                body: JSON.stringify({ id: btn.dataset.del })
-              });
-              showMsg($("stockMsg"), "Product deleted", "success");
-              loadProducts();
-              setTimeout(() => hideMsg($("stockMsg")), 2000);
-            } catch (e) {
-              showMsg($("stockMsg"), e.message, "error");
-            }
-          };
-        });
+        allProducts = await api("/admin/products");
+        filterProducts();
       } catch (e) {
         showMsg($("stockMsg"), e.message, "error");
       }

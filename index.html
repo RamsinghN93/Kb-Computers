@@ -457,7 +457,20 @@ a { text-decoration: none; color: inherit; }
 <header class="top"><div class="wrap nav"><div class="brand">KB <span>Computers</span></div><nav class="links"><a href="#products">Products</a><a href="#repair">Repair Call</a><a href="#track">Track Repair</a><a href="#visit">Shop Visit</a></nav></div></header>
 <main>
 <section class="hero"><div class="wrap hero-grid"><div><div class="eyebrow">Computer Hardware • Sales • Service</div><h1>Buy hardware. Check stock. Get your PC repaired.</h1><p>Browse available products before visiting the shop. Repair call logging is optional, and customers can track an existing repair using the call number and mobile number.</p><div class="actions"><a class="btn" href="#products">View Stock</a><a class="btn secondary" href="#track">Track Repair</a></div></div><div class="hero-card"><div class="muted">Shop policy</div><strong>Pay at Shop</strong><p class="muted">Online payment is not enabled. Product purchases and repair payments are handled after visiting the shop.</p><div class="notice">Repair call is optional. You can simply check stock and add items to your shop-visit list.</div></div></div></section>
-<section id="products" class="section"><div class="wrap"><h2>Products & Live Stock</h2><p class="lead">See stock availability before coming to the shop. Stock is shared and updates for everyone.</p><div id="productGrid" class="grid"></div></div></section>
+<section id="products" class="section"><div class="wrap"><h2>Products & Live Stock</h2><p class="lead">See stock availability before coming to the shop. Stock is shared and updates for everyone.</p>
+<div class="card" style="margin:18px 0;padding:16px;">
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+    <input id="productSearch" type="search" placeholder="🔎 Search RAM, SSD, keyboard, mouse..." autocomplete="off" style="flex:1;min-width:220px;">
+    <select id="productFilter" style="width:auto;min-width:150px;">
+      <option value="all">All products</option>
+      <option value="in">In stock</option>
+      <option value="limited">Limited stock</option>
+      <option value="out">Out of stock</option>
+    </select>
+  </div>
+  <div id="productSearchInfo" class="small muted" style="margin-top:8px;"></div>
+</div>
+<div id="productGrid" class="grid"></div></div></section>
 <section id="repair" class="section"><div class="wrap"><h2>Repair Call</h2><p class="lead">Create a repair call only if you need service tracking. It is not required for product shopping.</p><div class="card form"><form id="repairForm" autocomplete="on" novalidate><div class="form-grid"><div class="field"><label for="rName">Customer Name</label><input id="rName" name="name" maxlength="80" required autocomplete="name"></div><div class="field"><label for="rPhone">Mobile Number</label><input id="rPhone" name="phone" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" required autocomplete="tel"></div><div class="field"><label for="rDevice">Device</label><input id="rDevice" name="device" maxlength="120" placeholder="Laptop / Desktop / Printer" required></div><div class="field"><label for="rPriority">Priority</label><select id="rPriority" name="priority"><option value="Normal">Normal</option><option value="Urgent">Urgent</option></select></div><div class="field full"><label for="rProblem">Problem / Service Required</label><textarea id="rProblem" name="problem" maxlength="1000" required></textarea></div></div><div class="actions"><button class="btn" type="submit">Create Repair Call</button><a class="btn secondary" href="#track">Already have a call? Track it</a></div></form><div id="repairCreated" class="notice hidden"></div></div></div></section>
 <section id="track" class="section"><div class="wrap"><h2>Track Repair</h2><p class="lead">Customers can check the latest status. Internal notes and staff details are not shown.</p><div class="card form"><div class="form-grid"><div class="field"><label for="trackId">Repair Call Number</label><input id="trackId" maxlength="32" placeholder="Example: KB-1001" autocomplete="off"></div><div class="field"><label for="trackPhone">Mobile Number</label><input id="trackPhone" inputmode="numeric" maxlength="10" placeholder="Mobile used while logging" autocomplete="tel"></div></div><div class="actions"><button class="btn" type="button" id="trackBtn">Track Status</button></div><div id="trackResult" class="track-result"></div></div></div></section>
 <section id="visit" class="section"><div class="wrap"><h2>Shop Visit List</h2><p class="lead">Add products you want to check or purchase when you visit the shop. This list is private to your browser.</p><div id="visitList" class="card form"></div></div></section>
@@ -607,7 +620,32 @@ const API_BASE = "https://kb-computers-api.nramsingh93.workers.dev";
       return;
     }
 
-    for (const p of productsCache) {
+    const query = (el("productSearch").value || "").trim().toLowerCase();
+    const filter = el("productFilter").value;
+    const filtered = productsCache.filter((p) => {
+      const text = [p.name, p.id, p.tag].map(v => String(v || "").toLowerCase()).join(" ");
+      const matchesText = !query || text.includes(query);
+      const stock = Number(p.stock) || 0;
+      const matchesStock =
+        filter === "all" ||
+        (filter === "in" && stock > 3) ||
+        (filter === "limited" && stock > 0 && stock <= 3) ||
+        (filter === "out" && stock <= 0);
+      return matchesText && matchesStock;
+    });
+
+    el("productSearchInfo").textContent =
+      `${filtered.length} of ${productsCache.length} product${productsCache.length === 1 ? "" : "s"} shown`;
+
+    if (!filtered.length) {
+      const empty = document.createElement("div");
+      empty.className = "empty";
+      empty.textContent = "No matching products found. Try another search.";
+      grid.append(empty);
+      return;
+    }
+
+    for (const p of filtered) {
       const [cls, label] = stockInfo(p.stock);
       const article = document.createElement("article");
       article.className = "card product";
@@ -646,6 +684,9 @@ const API_BASE = "https://kb-computers-api.nramsingh93.workers.dev";
       grid.append(article);
     }
   }
+
+  el("productSearch").addEventListener("input", renderProducts);
+  el("productFilter").addEventListener("change", renderProducts);
 
   function addToVisit(id) {
     const p = productsCache.find((x) => x.id === id);
