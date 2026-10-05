@@ -21,7 +21,7 @@ export interface Env {
 // ---------- CONFIG ----------
 // Add your GitHub Pages domain and local testing origins here
 const ALLOWED_ORIGINS = [
-  "https://YOUR-USERNAME.github.io",          // ← change this
+  "https://ramsinghn93.github.io/Kb-Computers/",         // ← change this
   "http://localhost:5500",
   "http://127.0.0.1:5500",
   "http://localhost:8787",
