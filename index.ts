@@ -13,8 +13,8 @@ const ALLOWED_ORIGINS = [
   "http://127.0.0.1:5500",
 ];
 
-const ADMIN_PASSWORD = "Kb@dmin2026!";
-const STAFF_PASSWORD = "KbStaff123rjpm";
+const ADMIN_PASSWORD = "Kb@dmin2026!1";
+const STAFF_PASSWORD = "KbStaff123rjpm1";
 
 const MAX_NAME = 80;
 const MAX_TEXT = 1000;
