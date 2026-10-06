@@ -451,33 +451,23 @@ a { text-decoration: none; color: inherit; }
   .hero h1 { font-size: 2rem; }
   .product { min-height: auto; }
 }
+
+.product-detail-overlay{position:fixed;inset:0;background:rgba(2,6,23,.72);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:18px;z-index:1000}.product-detail-overlay.open{display:flex}.product-detail{width:min(560px,100%);max-height:90vh;overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:var(--shadow-lg)}.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}.detail-item{padding:12px;border-radius:10px;background:#f8fafc}.detail-label{font-size:.78rem;color:var(--muted)}.detail-value{font-weight:700;margin-top:2px}.big-icon{font-size:4rem;text-align:center;margin:10px}.catalog-tools{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.catalog-tools>*{flex:1;min-width:190px}@media(max-width:600px){.detail-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <header class="top"><div class="wrap nav"><div class="brand">KB <span>Computers</span></div><nav class="links"><a href="#products">Products</a><a href="#repair">Repair Call</a><a href="#track">Track Repair</a><a href="#visit">Shop Visit</a></nav></div></header>
 <main>
 <section class="hero"><div class="wrap hero-grid"><div><div class="eyebrow">Computer Hardware • Sales • Service</div><h1>Buy hardware. Check stock. Get your PC repaired.</h1><p>Browse available products before visiting the shop. Repair call logging is optional, and customers can track an existing repair using the call number and mobile number.</p><div class="actions"><a class="btn" href="#products">View Stock</a><a class="btn secondary" href="#track">Track Repair</a></div></div><div class="hero-card"><div class="muted">Shop policy</div><strong>Pay at Shop</strong><p class="muted">Online payment is not enabled. Product purchases and repair payments are handled after visiting the shop.</p><div class="notice">Repair call is optional. You can simply check stock and add items to your shop-visit list.</div></div></div></section>
-<section id="products" class="section"><div class="wrap"><h2>Products & Live Stock</h2><p class="lead">See stock availability before coming to the shop. Stock is shared and updates for everyone.</p>
-<div class="card" style="margin:18px 0;padding:16px;">
-  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-    <input id="productSearch" type="search" placeholder="🔎 Search RAM, SSD, keyboard, mouse..." autocomplete="off" style="flex:1;min-width:220px;">
-    <select id="productFilter" style="width:auto;min-width:150px;">
-      <option value="all">All products</option>
-      <option value="in">In stock</option>
-      <option value="limited">Limited stock</option>
-      <option value="out">Out of stock</option>
-    </select>
-  </div>
-  <div id="productSearchInfo" class="small muted" style="margin-top:8px;"></div>
-</div>
-<div id="productGrid" class="grid"></div></div></section>
+<section id="products" class="section"><div class="wrap"><h2>Featured Products</h2><p class="lead">A quick look at our latest and popular products. Browse the full catalogue to see all available stock.</p><div id="featuredGrid" class="grid"></div><div style="text-align:center;margin-top:18px;"><button id="viewAllProducts" class="btn">View All Products →</button></div></div></section>
+<section id="catalogue" class="section" style="display:none;"><div class="wrap"><h2>All Products</h2><p class="lead">Search and filter our complete catalogue.</p><div class="catalog-tools"><input id="catalogSearch" type="search" placeholder="🔎 Search products, ID or tag..."><select id="catalogStock"><option value="all">All stock</option><option value="in">In stock</option><option value="low">Limited stock</option><option value="out">Out of stock</option></select></div><div id="productGrid" class="grid"></div><div id="catalogPage" style="display:flex;justify-content:center;gap:10px;margin-top:20px;"></div></div></section>
 <section id="repair" class="section"><div class="wrap"><h2>Repair Call</h2><p class="lead">Create a repair call only if you need service tracking. It is not required for product shopping.</p><div class="card form"><form id="repairForm" autocomplete="on" novalidate><div class="form-grid"><div class="field"><label for="rName">Customer Name</label><input id="rName" name="name" maxlength="80" required autocomplete="name"></div><div class="field"><label for="rPhone">Mobile Number</label><input id="rPhone" name="phone" inputmode="numeric" pattern="[6-9][0-9]{9}" maxlength="10" required autocomplete="tel"></div><div class="field"><label for="rDevice">Device</label><input id="rDevice" name="device" maxlength="120" placeholder="Laptop / Desktop / Printer" required></div><div class="field"><label for="rPriority">Priority</label><select id="rPriority" name="priority"><option value="Normal">Normal</option><option value="Urgent">Urgent</option></select></div><div class="field full"><label for="rProblem">Problem / Service Required</label><textarea id="rProblem" name="problem" maxlength="1000" required></textarea></div></div><div class="actions"><button class="btn" type="submit">Create Repair Call</button><a class="btn secondary" href="#track">Already have a call? Track it</a></div></form><div id="repairCreated" class="notice hidden"></div></div></div></section>
 <section id="track" class="section"><div class="wrap"><h2>Track Repair</h2><p class="lead">Customers can check the latest status. Internal notes and staff details are not shown.</p><div class="card form"><div class="form-grid"><div class="field"><label for="trackId">Repair Call Number</label><input id="trackId" maxlength="32" placeholder="Example: KB-1001" autocomplete="off"></div><div class="field"><label for="trackPhone">Mobile Number</label><input id="trackPhone" inputmode="numeric" maxlength="10" placeholder="Mobile used while logging" autocomplete="tel"></div></div><div class="actions"><button class="btn" type="button" id="trackBtn">Track Status</button></div><div id="trackResult" class="track-result"></div></div></div></section>
 <section id="visit" class="section"><div class="wrap"><h2>Shop Visit List</h2><p class="lead">Add products you want to check or purchase when you visit the shop. This list is private to your browser.</p><div id="visitList" class="card form"></div></div></section>
 </main>
 <div class="visit"><div class="wrap"><div class="visit-inner"><div><div class="visit-count" id="visitCount">0 items in shop visit list</div><div class="small">Bring this list to the shop.</div></div><button class="btn" type="button" id="waBtn">Send List on WhatsApp</button></div></div></div>
 <footer class="footer"><div class="wrap"><strong>KB Computers</strong><p class="small">Hardware sales and computer repair service. Local shop service. Payment only at shop visit.</p><p class="small">WhatsApp: +91 98431 62978</p><p class="small">© 2026 KB Computers</p></div></footer>
-<script>
+<div id="productDetailOverlay" class="product-detail-overlay" role="dialog" aria-modal="true"><div class="product-detail"><div class="row" style="align-items:center"><h2 id="detailTitle" style="flex:1;margin:0">Product Details</h2><button id="closeProductDetail" class="btn secondary" type="button">✕</button></div><div id="productDetailBody"></div></div></div><script>
 'use strict';
 
 /*
@@ -608,85 +598,24 @@ const API_BASE = "https://kb-computers-api.nramsingh93.workers.dev";
     return b;
   }
 
-  function renderProducts() {
-    const grid = el("productGrid");
-    grid.replaceChildren();
-
-    if (!productsCache.length) {
-      const empty = document.createElement("div");
-      empty.className = "empty";
-      empty.textContent = "Unable to load products. Please refresh the page.";
-      grid.append(empty);
-      return;
-    }
-
-    const query = (el("productSearch").value || "").trim().toLowerCase();
-    const filter = el("productFilter").value;
-    const filtered = productsCache.filter((p) => {
-      const text = [p.name, p.id, p.tag].map(v => String(v || "").toLowerCase()).join(" ");
-      const matchesText = !query || text.includes(query);
-      const stock = Number(p.stock) || 0;
-      const matchesStock =
-        filter === "all" ||
-        (filter === "in" && stock > 3) ||
-        (filter === "limited" && stock > 0 && stock <= 3) ||
-        (filter === "out" && stock <= 0);
-      return matchesText && matchesStock;
-    });
-
-    el("productSearchInfo").textContent =
-      `${filtered.length} of ${productsCache.length} product${productsCache.length === 1 ? "" : "s"} shown`;
-
-    if (!filtered.length) {
-      const empty = document.createElement("div");
-      empty.className = "empty";
-      empty.textContent = "No matching products found. Try another search.";
-      grid.append(empty);
-      return;
-    }
-
-    for (const p of filtered) {
-      const [cls, label] = stockInfo(p.stock);
-      const article = document.createElement("article");
-      article.className = "card product";
-
-      const icon = document.createElement("div");
-      icon.className = "icon";
-      icon.textContent = p.icon || "🖥️";
-
-      const tag = document.createElement("div");
-      tag.className = "muted small";
-      tag.textContent = p.tag || "";
-
-      const name = document.createElement("h3");
-      name.textContent = p.name;
-
-      const price = document.createElement("div");
-      price.className = "price";
-      price.textContent = money(p.price);
-
-      const stock = document.createElement("div");
-      stock.className = "stock " + cls;
-      stock.textContent = label;
-
-      const actions = document.createElement("div");
-      actions.className = "product-actions";
-      actions.append(
-        createButton(
-          p.stock <= 0 ? "Unavailable" : "Add to Visit",
-          "",
-          () => addToVisit(p.id),
-          p.stock <= 0
-        )
-      );
-
-      article.append(icon, tag, name, price, stock, actions);
-      grid.append(article);
-    }
+  let cataloguePage=1, cataloguePerPage=12;
+  function makeProductCard(p){
+    const [cls,label]=stockInfo(p.stock), article=document.createElement("article"); article.className="card product";
+    const icon=document.createElement("div");icon.className="icon";icon.textContent=p.icon||"🖥️";
+    const tag=document.createElement("div");tag.className="muted small";tag.textContent=p.tag||"";
+    const name=document.createElement("h3");name.textContent=p.name;
+    const price=document.createElement("div");price.className="price";price.textContent=money(p.price);
+    const stock=document.createElement("div");stock.className="stock "+cls;stock.textContent=label;
+    const actions=document.createElement("div");actions.className="product-actions";
+    actions.append(createButton("View Details","secondary",()=>showProductDetails(p.id)));
+    actions.append(createButton(p.stock<=0?"Unavailable":"Add to Visit","",()=>addToVisit(p.id),p.stock<=0));
+    article.append(icon,tag,name,price,stock,actions);return article;
   }
-
-  el("productSearch").addEventListener("input", renderProducts);
-  el("productFilter").addEventListener("change", renderProducts);
+  function renderFeatured(){const g=el("featuredGrid");g.replaceChildren();productsCache.slice(0,8).forEach(p=>g.append(makeProductCard(p)))}
+  function filteredCatalogue(){const q=el("catalogSearch").value.trim().toLowerCase(),f=el("catalogStock").value;return productsCache.filter(p=>{const text=[p.name,p.id,p.tag].map(v=>String(v||"").toLowerCase()).join(" "),stock=Number(p.stock)||0;return (!q||text.includes(q))&&(f==="all"||(f==="in"&&stock>3)||(f==="low"&&stock>0&&stock<=3)||(f==="out"&&stock<=0))})}
+  function renderProducts(){const list=filteredCatalogue(),pages=Math.max(1,Math.ceil(list.length/cataloguePerPage));cataloguePage=Math.min(cataloguePage,pages);const from=(cataloguePage-1)*cataloguePerPage;const grid=el("productGrid");grid.replaceChildren();list.slice(from,from+cataloguePerPage).forEach(p=>grid.append(makeProductCard(p)));const nav=el("catalogPage");nav.replaceChildren();if(pages>1){const prev=createButton("← Previous","secondary",()=>{cataloguePage--;renderProducts();});prev.disabled=cataloguePage===1;const info=document.createElement("span");info.className="small";info.style.padding="10px";info.textContent=`Page ${cataloguePage} of ${pages}`;const next=createButton("Next →","secondary",()=>{cataloguePage++;renderProducts();});next.disabled=cataloguePage===pages;nav.append(prev,info,next)}}
+  function showProductDetails(id){const p=productsCache.find(x=>x.id===id);if(!p)return;el("detailTitle").textContent=p.name||"Product Details";const b=el("productDetailBody");b.replaceChildren();const icon=document.createElement("div");icon.className="big-icon";icon.textContent=p.icon||"📦";b.append(icon);const tag=document.createElement("div");tag.className="muted small";tag.textContent=p.tag||"Computer Hardware";b.append(tag);const grid=document.createElement("div");grid.className="detail-grid";[["Product ID",p.id],["Price",money(p.price)],["Availability",stockInfo(p.stock)[1]],["Stock",String(p.stock)]].forEach(([l,v])=>{const x=document.createElement("div");x.className="detail-item";const a=document.createElement("div");a.className="detail-label";a.textContent=l;const c=document.createElement("div");c.className="detail-value";c.textContent=v;x.append(a,c);grid.append(x)});b.append(grid);const actions=document.createElement("div");actions.className="product-actions";actions.append(createButton(p.stock>0?"Add to Visit":"Unavailable","",()=>addToVisit(p.id),p.stock<=0));b.append(actions);el("productDetailOverlay").classList.add("open")}
+  function closeProductDetails(){el("productDetailOverlay").classList.remove("open")}
 
   function addToVisit(id) {
     const p = productsCache.find((x) => x.id === id);
@@ -998,11 +927,18 @@ const API_BASE = "https://kb-computers-api.nramsingh93.workers.dev";
 
     renderCart();
     await fetchProducts();
+    renderFeatured();
     renderProducts();
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
+    el("viewAllProducts").addEventListener("click",()=>{el("catalogue").style.display="block";el("catalogue").scrollIntoView({behavior:"smooth"});});
+  el("catalogSearch").addEventListener("input",()=>{cataloguePage=1;renderProducts()});
+  el("catalogStock").addEventListener("change",()=>{cataloguePage=1;renderProducts()});
+  el("closeProductDetail").addEventListener("click",closeProductDetails);
+  el("productDetailOverlay").addEventListener("click",e=>{if(e.target===el("productDetailOverlay"))closeProductDetails()});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape")closeProductDetails()});
+  document.addEventListener("DOMContentLoaded", init);
   } else {
     init();
   }

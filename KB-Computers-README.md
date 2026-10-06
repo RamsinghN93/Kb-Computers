@@ -232,3 +232,12 @@ KB Computers System:
 
 **Created for**: RamsinghN93  
 **Last Updated**: October 2026
+
+
+## Product Management Enhancements
+
+- Home page shows 8 featured products.
+- Full catalogue shows 12 products per page with search, stock filters and pagination.
+- Customers can open product details before adding an item to the Shop Visit List.
+- Admin dashboard includes total products, units in stock, and low/out-of-stock counts.
+- Admin supports CSV export/import. CSV columns: `id,name,price,stock,icon,tag`. Existing IDs are updated and new IDs are added.
