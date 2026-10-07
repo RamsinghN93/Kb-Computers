@@ -1,4 +1,4 @@
--- KB Computers D1 Schema
+-- KB Computers D1 Schema (hardened)
 
 CREATE TABLE IF NOT EXISTS products (
   id TEXT PRIMARY KEY,
@@ -17,13 +17,16 @@ CREATE TABLE IF NOT EXISTS repairs (
   priority TEXT NOT NULL DEFAULT 'Normal',
   problem TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'Awaiting Accessories',
-  created TEXT NOT NULL
+  created TEXT NOT NULL,
+  updated_by TEXT DEFAULT '',
+  updated_at TEXT DEFAULT ''
 );
 
 CREATE INDEX IF NOT EXISTS idx_repairs_phone ON repairs(phone);
 CREATE INDEX IF NOT EXISTS idx_repairs_id_phone ON repairs(id, phone);
+CREATE INDEX IF NOT EXISTS idx_repairs_status ON repairs(status);
 
--- Demo products
+-- Demo products (safe to re-run)
 INSERT OR IGNORE INTO products (id, name, price, icon, tag, stock) VALUES
   ('p1', '16GB DDR4 RAM', 2999, '🧠', 'Popular', 5),
   ('p2', '1TB NVMe SSD', 5499, '💾', 'Fast', 3),

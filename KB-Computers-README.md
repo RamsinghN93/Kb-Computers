@@ -1,6 +1,6 @@
 # KB Computers – Live Stock + Repair Call System
 
-Complete guide for the KB Computers website with shared live stock, private cart, repair call tracking, and secure admin panel.
+Complete guide for the KB Computers website with shared live stock, private cart, repair call tracking, and secure admin/staff panels.
 
 ---
 
@@ -11,7 +11,8 @@ Complete guide for the KB Computers website with shared live stock, private cart
 | Product Stock             | Cloudflare D1            | Shared live for everyone       |
 | Shop Visit List (Cart)    | Browser (localStorage)   | Private per user               |
 | Repair Calls              | Cloudflare D1            | Stored on server               |
-| Admin Panel               | Password protected       | Only admin                     |
+| Admin Panel               | Server-side password     | Only admin                     |
+| Staff Panel               | Server-side password     | Staff (status updates only)    |
 
 ---
 
@@ -19,8 +20,11 @@ Complete guide for the KB Computers website with shared live stock, private cart
 
 - **Website**: https://ramsinghn93.github.io/Kb-Computers
 - **Admin Panel**: https://ramsinghn93.github.io/Kb-Computers/admin.html
+- **Staff Panel**: https://ramsinghn93.github.io/Kb-Computers/staff.html
 - **API (Worker)**: https://kb-computers-api.nramsingh93.workers.dev
-- **Admin Password**: `Kb@dmin2026!`
+
+> **Security note:** Passwords are **never** stored in source code or this README.  
+> They live only as Cloudflare Worker secrets.
 
 ---
 
@@ -31,13 +35,14 @@ Complete guide for the KB Computers website with shared live stock, private cart
 - **Database**: Cloudflare D1 (SQLite)
 - **Cart**: Stored only in user's browser (localStorage)
 - **Stock & Repairs**: Stored in Cloudflare D1 (shared)
+- **Auth**: Passwords checked only on the Worker (header-based, timing-safe compare)
 
 ### How Stock Sharing Works
 
 1. User adds products to cart (private – only in their browser)
 2. User clicks **“Send List on WhatsApp”**
 3. Frontend calls the Worker → `/stock/reserve`
-4. Worker checks stock and reduces it in D1
+4. Worker checks stock and reduces it in D1 (with stock >= guard)
 5. Stock is now updated for **all users**
 6. WhatsApp opens with the product list
 7. Cart is cleared only in that user’s browser
@@ -45,8 +50,6 @@ Complete guide for the KB Computers website with shared live stock, private cart
 ---
 
 ## Repair Call Status (Color Coded)
-
-When a customer tracks their repair, they see a colored status:
 
 | Status                  | Color     | Meaning                                      |
 |-------------------------|-----------|----------------------------------------------|
@@ -56,35 +59,86 @@ When a customer tracks their repair, they see a colored status:
 | Completed               | Gray      | Repair finished and closed                   |
 | Cancelled               | Red       | Cancelled (reason is shown to customer)      |
 
-**Important:**
 - Status becomes **Completed** only when work is fully finished.
-- If you choose **Cancelled**, the system will ask for a **reason**.
+- If you choose **Cancelled**, the system requires a **reason**.
 - The cancellation reason is visible to the customer when they track the call.
+
+---
+
+## Security Features (Zero-Vulnerable Design)
+
+| Protection                        | How it works                                      |
+|-----------------------------------|---------------------------------------------------|
+| No passwords in source / frontend | Stored only as Cloudflare secrets                 |
+| Timing-safe password compare      | Prevents timing attacks                           |
+| Server-only auth                  | Admin/Staff checks happen only in the Worker      |
+| Input sanitization                | All text cleaned of control chars + length limited|
+| Parameterized SQL                 | No string concatenation for values                |
+| CORS lockdown                     | Only your GitHub Pages + localhost origins        |
+| CSP on frontend                   | Restricts scripts, frames, connections            |
+| Private cart                      | Never leaves the user’s browser                   |
+| Stock race guard                  | `UPDATE … AND stock >= ?` + change count check   |
+| Rate-friendly limits              | Max items per reserve, length caps                |
+| Track requires both ID + phone    | Cannot enumerate repairs by ID alone              |
+
+---
+
+## First-Time / Password Setup (Required)
+
+Passwords must be set as **Worker secrets** (never commit them):
+
+```bash
+# In the folder that contains wrangler.toml
+npx wrangler secret put ADMIN_PASSWORD
+# type your strong admin password when prompted
+
+npx wrangler secret put STAFF_PASSWORD
+# type your strong staff password when prompted
+```
+
+After setting secrets, redeploy the Worker (or let GitHub/CI redeploy).
+
+To change a password later, just run the same `wrangler secret put` command again.
+
+---
+
+## Database Migration (Existing D1)
+
+If your D1 database was created with the old schema (missing columns), run this once in the Cloudflare D1 Console:
+
+```sql
+ALTER TABLE repairs ADD COLUMN updated_by TEXT DEFAULT '';
+ALTER TABLE repairs ADD COLUMN updated_at TEXT DEFAULT '';
+```
+
+(If the columns already exist, the statements will error harmlessly – that is fine.)
+
+New installs: just apply the full `schema.sql`.
 
 ---
 
 ## Admin Panel Usage
 
-### Login
 1. Open: https://ramsinghn93.github.io/Kb-Computers/admin.html
-2. Enter password: `Kb@dmin2026!`
+2. Enter the **ADMIN_PASSWORD** you set as a secret
 
-### What Admin Can Do
+**Admin can:**
 
-**Products:**
-- Add new product
-- Edit product (Name, Price, Icon/Emoji, Tag, Stock)
-- Delete product
-- Update stock anytime
-
-**Repair Calls:**
+- Add / edit / delete products
+- Update stock
 - View all repair calls
-- Change status:
-  - Awaiting Accessories
-  - In Progress
-  - Ready for Pickup
-  - Completed
-  - Cancelled (requires reason)
+- Change repair status (including Cancelled + reason)
+- CSV export / import of products
+
+---
+
+## Staff Panel Usage
+
+1. Open: https://ramsinghn93.github.io/Kb-Computers/staff.html
+2. Enter the **STAFF_PASSWORD** you set as a secret
+3. Enter your name when updating status
+
+Staff can view repairs and update status only (cannot manage products).
 
 ---
 
@@ -103,107 +157,46 @@ When a customer tracks their repair, they see a colored status:
 
 ```
 Kb-Computers/
-├── index.html          # Main website (with colored status tracking)
+├── index.html          # Main website
 ├── admin.html          # Admin panel
+├── staff.html          # Staff panel
 ├── index.ts            # Cloudflare Worker (backend)
 ├── wrangler.toml       # Worker configuration
 ├── schema.sql          # Database structure
-└── README.md           # This file
+└── KB-Computers-README.md
 ```
 
 ---
 
-## How to Update / Redeploy in Future
+## How to Update / Redeploy
 
-### Update Backend (Worker)
+### Backend (Worker)
 
-1. Open GitHub repository: **Kb-Computers**
-2. Edit the file `index.ts`
-3. Commit the changes
-4. Cloudflare will automatically redeploy the Worker
+1. Edit `index.ts` on GitHub (or locally + push)
+2. Cloudflare redeploys the Worker
+3. Secrets stay in place (they are not overwritten by code)
 
-### Update Frontend or Admin
+### Frontend
 
-1. Edit `index.html` or `admin.html` on GitHub
-2. Commit the changes
-3. GitHub Pages updates automatically
-
----
-
-## Database Management (Advanced)
-
-If you need to run SQL commands manually:
-
-1. Go to [Cloudflare Dashboard](https://dash.cloudflare.com)
-2. Open **D1** → select `kb-computers-db`
-3. Open **Console**
-
-### Useful SQL Commands
-
-```sql
--- View all products
-SELECT * FROM products;
-
--- View all repair calls
-SELECT * FROM repairs ORDER BY created DESC;
-
--- Manually change stock
-UPDATE products SET stock = 10 WHERE id = 'p1';
-
--- Change repair status
-UPDATE repairs SET status = 'Completed' WHERE id = 'KB-XXXXXXXXXX';
-
--- See cancelled repairs with reason
-SELECT id, name, status, problem FROM repairs WHERE status = 'Cancelled';
-```
-
----
-
-## Security Features (Zero Vulnerable Design)
-
-- Cart data never leaves the user’s browser
-- Stock and repairs are stored only on Cloudflare
-- Admin password is checked **only on the server**
-- All user inputs are cleaned and validated on the Worker
-- CORS is restricted to your domain only
-- No sensitive data is stored in frontend code
-- Cancellation requires a proper reason
-- Status colors help customers track progress clearly
-
----
-
-## Changing Admin Password
-
-1. Open `index.ts` in GitHub
-2. Find this line:
-
-```ts
-const ADMIN_PASSWORD = "Kb@dmin2026!";
-```
-
-3. Change the password
-4. Commit the file
-5. Wait for Cloudflare to redeploy
+1. Edit `index.html` / `admin.html` / `staff.html`
+2. Commit → GitHub Pages updates automatically
 
 ---
 
 ## Troubleshooting
 
-| Problem                        | Solution                                      |
-|-------------------------------|-----------------------------------------------|
-| Products not loading          | Check CORS in `index.ts` (ALLOWED_ORIGINS)    |
-| Admin login fails             | Make sure password matches exactly            |
-| Stock not decreasing          | Check browser console for errors              |
-| Status shows wrong color      | Hard refresh the page                         |
-| Cancel without reason         | System will block it and ask for reason       |
-| Changes not reflecting        | Hard refresh (close tab & reopen)             |
-| Worker not updating           | Wait 30–60 seconds after committing on GitHub |
+| Problem                        | Solution                                              |
+|-------------------------------|-------------------------------------------------------|
+| Products not loading          | Check CORS `ALLOWED_ORIGINS` in `index.ts`            |
+| Admin / Staff login fails     | Confirm secrets are set: `wrangler secret list`       |
+| “Unauthorized” after redeploy | Secrets are account-level; re-put if needed           |
+| Stock not decreasing          | Browser console errors; check stock race message      |
+| updated_by / updated_at empty | Run the ALTER TABLE migration above                   |
+| Worker not updating           | Wait 30–60 seconds after commit                       |
 
 ---
 
-## Current Status List (Final)
-
-These are the only valid statuses:
+## Valid Statuses
 
 - `Awaiting Accessories`
 - `In Progress`
@@ -213,31 +206,6 @@ These are the only valid statuses:
 
 ---
 
-## Quick Reference Prompt
-
-```
-KB Computers System:
-- Frontend: GitHub Pages (https://ramsinghn93.github.io/Kb-Computers)
-- Backend: Cloudflare Worker + D1
-- Worker URL: https://kb-computers-api.nramsingh93.workers.dev
-- Admin: /admin.html (Password: Kb@dmin2026!)
-- Cart: localStorage (private)
-- Stock & Repairs: Cloudflare D1 (shared)
-- Status colors: Orange (Awaiting), Blue (In Progress), Green (Ready), Gray (Completed), Red (Cancelled)
-- Cancel requires reason
-- Admin can: Add/Edit/Delete products, change stock, change repair status
-```
-
----
-
 **Created for**: RamsinghN93  
-**Last Updated**: October 2026
-
-
-## Product Management Enhancements
-
-- Home page shows 8 featured products.
-- Full catalogue shows 12 products per page with search, stock filters and pagination.
-- Customers can open product details before adding an item to the Shop Visit List.
-- Admin dashboard includes total products, units in stock, and low/out-of-stock counts.
-- Admin supports CSV export/import. CSV columns: `id,name,price,stock,icon,tag`. Existing IDs are updated and new IDs are added.
+**Last Updated**: October 2026  
+**Security focus**: secrets-only passwords, sanitized inputs, parameterized SQL, CORS + CSP
